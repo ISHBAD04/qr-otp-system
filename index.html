@@ -34,9 +34,16 @@
 
     <div id="login-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); z-index: 1000; display: flex; align-items: center; justify-content: center; color: white; flex-direction: column;">
         <h1>CEMA Secure Login</h1>
-        <p>Enter the 6-digit OTP from your mobile scan:</p>
-        <input type="text" id="otp-input" placeholder="000000" style="padding: 15px; font-size: 1.5rem; text-align: center; border-radius: 8px; border: none; width: 200px; margin-bottom: 20px; color: #333;">
-        <button onclick="verifyAndEnter()" style="background: #28a745; font-weight: bold; padding: 15px 40px;">VERIFY & ENTER DASHBOARD</button>
+        
+        <div style="background: white; padding: 10px; border-radius: 10px; margin-bottom: 20px;">
+            <div id="login-qr-container">
+                <p style="color: #333; margin: 10px;">Click generate to scan</p>
+            </div>
+        </div>
+        <button onclick="generateDashboardQR('login-qr-container')" style="margin-bottom: 20px; background: #f39c12;">1. GENERATE QR TO SCAN</button>
+        <p>2. Enter the 6-digit OTP from your mobile scan:</p>
+        <input type="text" id="otp-input" placeholder="000000" ...>
+        <button onclick="verifyAndEnter()" ...>VERIFY & ENTER DASHBOARD</button>
     </div>
 
     <div class="sidebar">
@@ -71,7 +78,7 @@
         let count = 0;
 
         // Function 1: Generate QR
-        async function generateDashboardQR() {
+        async function generateDashboardQR(containerId = 'qr-container') {
             try {
                 const res = await fetch(`${API_BASE}/generate`, {
                     method: 'POST',
@@ -80,7 +87,7 @@
                 });
                 const data = await res.json();
                 if(data.qrCode) {
-                    document.getElementById('qr-container').innerHTML = `<img src="${data.qrCode}" width="250">`;
+                    document.getElementById(containerId).innerHTML = `<img src="${data.qrCode}" width="200">`;
                 }
             } catch (err) { alert("Error connecting to API."); }
         }
