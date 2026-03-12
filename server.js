@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files (your index.html)
+// Serve static files from the root directory
 app.use(express.static(path.join(__dirname)));
 
 app.get('/', (req, res) => {
@@ -41,10 +41,11 @@ const otpStore = {};
 // --- Generate OTP and QR ---
 app.post('/generate', async (req, res) => {
     const { userId } = req.body;
+    // Ensure we have a userId to store the OTP against
+    const id = userId || 'Admin_User'; 
     const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false });
     
-    // Store OTP with 5-minute expiry
-    otpStore[userId] = { otp, expires: Date.now() + 300000 };
+    otpStore[id] = { otp, expires: Date.now() + 300000 };
 
     try {
         const qrOptions = { color: { dark: '#003366', light: '#F0F0F0' }, width: 300 };
@@ -60,13 +61,23 @@ app.post('/generate', async (req, res) => {
 // --- Verify OTP logic ---
 app.post('/verify', (req, res) => {
     const { userId, userOtp } = req.body;
-    const record = otpStore[userId];
+    const id = userId || 'Admin_User';
+    const record = otpStore[id];
 
     if (!record || Date.now() > record.expires) {
         return res.status(400).json({ success: false, message: "OTP Expired or Invalid" });
     }
 
     if (record.otp === userOtp) {
-        delete otpStore[userId]; // Delete after success for security
+        delete otpStore[id]; 
         res.json({ success: true, message: "Verified!" });
     } else {
+        res.status(400).json({ success: false, message: "Wrong OTP" });
+    }
+});
+
+// --- CRITICAL VERCEL FIX ---
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+module.exports = app; // This MUST be here for Vercel
