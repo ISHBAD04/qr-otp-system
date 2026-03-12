@@ -1,55 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>QR OTP Tester</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR OTP System</title>
     <style>
-    body { 
-        font-family: 'Segoe UI', sans-serif; 
-        text-align: center; 
-        padding-top: 50px; 
-        background-color: #f4f4f9;
-    }
-    button { 
-        padding: 12px 24px; 
-        font-size: 16px; 
-        font-weight: bold;
-        background-color: #007bff; 
-        color: white; 
-        border: none; 
-        border-radius: 8px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    button:hover {
-        background-color: #0056b3;
-    }
-    .card {
-        background: white;
-        padding: 20px;
-        display: inline-block;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        margin-top: 20px;
-    }
+        body { font-family: 'Segoe UI', sans-serif; text-align: center; background: #f4f7f6; padding: 50px; }
+        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: inline-block; }
+        button { background: #003366; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px; }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        #qr-code img { margin-top: 20px; border: 5px solid #fff; border-radius: 10px; }
     </style>
 </head>
 <body>
-    <h1>QR Code OTP System</h1>
-    <button onclick="generate()">Generate QR & OTP</button>
-    <div id="output"></div>
-    
+    <div class="container">
+        <h1>QR OTP Login</h1>
+        <button onclick="generateQR()">Step 1: Generate QR Code</button>
+        <div id="qr-code"></div>
+        <hr>
+        <input type="text" id="otp-input" placeholder="Enter 6-digit OTP">
+        <button onclick="verifyOTP()">Step 2: Login</button>
+    </div>
+
     <script>
-        async function generate() {
-            const res = await fetch('https://qr-otp-system-g32y.vercel.app/generate', {
+        const API_URL = 'https://qr-otp-system-g32y.vercel.app';
+
+        async function generateQR() {
+            const res = await fetch(`${API_URL}/generate`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ userId: 'user1' })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: 'user123' })
             });
             const data = await res.json();
-            document.getElementById('output').innerHTML = `
-                <p>Your OTP: <b>${data.otp}</b></p>
-                <img src="${data.qrCode}">
-            `;
+            document.getElementById('qr-code').innerHTML = `<img src="${data.qrCode}" alt="QR Code">`;
+        }
+
+        async function verifyOTP() {
+            const otp = document.getElementById('otp-input').value;
+            const res = await fetch(`${API_URL}/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: 'user123', userOtp: otp })
+            });
+            const data = await res.json();
+            alert(data.message || (data.success ? "Access Granted!" : "Error"));
         }
     </script>
 </body>
