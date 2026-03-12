@@ -40,7 +40,7 @@
     
     <script>
         async function generate() {
-            const res = await fetch('http://localhost:3000/generate', {
+            const res = await fetch('https://qr-otp-system-g32y.vercel.app/generate', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ userId: 'user1' })
