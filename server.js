@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// --- Verification Route ---
+// --- Verification Route for Scanning ---
 app.get('/verify-page', (req, res) => {
     const receivedOtp = req.query.otp;
     if (!receivedOtp) {
@@ -27,12 +27,14 @@ app.get('/verify-page', (req, res) => {
             <div style="background: #e7f3ff; display: inline-block; padding: 20px; border-radius: 10px;">
                 <p>Received OTP: <strong style="color: #003366; font-size: 2rem;">${receivedOtp}</strong></p>
             </div>
+            <p>Scanning successful! Use the code above on your login screen.</p>
         </div>
     `);
 });
 
 const otpStore = {}; 
 
+// --- Generate OTP and QR ---
 app.post('/generate', async (req, res) => {
     const { userId } = req.body;
     const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false });
@@ -41,7 +43,7 @@ app.post('/generate', async (req, res) => {
     try {
         const qrOptions = { color: { dark: '#003366', light: '#F0F0F0' }, width: 300 };
         
-        // --- FIX 2: Use your LIVE Vercel link here ---
+        // --- FIX 2: Your LIVE Vercel link ---
         const autoFillUrl = `https://qr-otp-system-g32y.vercel.app/verify-page?otp=${otp}`;
         
         const qrImage = await QRCode.toDataURL(autoFillUrl, qrOptions);
@@ -50,3 +52,26 @@ app.post('/generate', async (req, res) => {
         res.status(500).json({ error: "Failed to generate QR" });
     }
 });
+
+// --- Verify OTP logic ---
+app.post('/verify', (req, res) => {
+    const { userId, userOtp } = req.body;
+    const record = otpStore[userId];
+
+    if (!record || Date.now() > record.expires) {
+        return res.status(400).json({ message: "OTP Expired or Invalid" });
+    }
+
+    if (record.otp === userOtp) {
+        delete otpStore[userId];
+        res.json({ success: true, message: "Verified!" });
+    } else {
+        res.status(400).json({ message: "Wrong OTP" });
+    }
+});
+
+// --- FINAL FIX: Listen and Export ---
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+module.exports = app; // <--- THIS LINE IS THE KEY FOR VERCEL
