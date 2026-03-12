@@ -8,26 +8,30 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// --- FIX 1: Serve the frontend files ---
+// Serve static files (your index.html)
 app.use(express.static(path.join(__dirname)));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// --- Verification Route for Scanning ---
+// --- Verification Page (What the user sees on their phone) ---
 app.get('/verify-page', (req, res) => {
     const receivedOtp = req.query.otp;
     if (!receivedOtp) {
         return res.send('<h1>Error</h1><p>No OTP detected.</p>');
     }
     res.send(`
-        <div style="font-family: sans-serif; text-align: center; margin-top: 50px;">
-            <h1>Verification Page</h1>
-            <div style="background: #e7f3ff; display: inline-block; padding: 20px; border-radius: 10px;">
-                <p>Received OTP: <strong style="color: #003366; font-size: 2rem;">${receivedOtp}</strong></p>
+        <div style="font-family: sans-serif; text-align: center; margin-top: 50px; background: #f0f2f5; height: 100vh; padding-top: 50px;">
+            <div style="background: white; display: inline-block; padding: 40px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                <h1 style="color: #003366;">CEMA Secure Scan</h1>
+                <p style="font-size: 1.2rem; color: #666;">Your One-Time Password is:</p>
+                <div style="background: #e7f3ff; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <strong style="color: #003366; font-size: 3rem; letter-spacing: 5px;">${receivedOtp}</strong>
+                </div>
+                <p id="status" style="color: #28a745; font-weight: bold;">✅ Scan Successful</p>
+                <p style="color: #999; font-size: 0.8rem;">Enter this code on your dashboard to proceed.</p>
             </div>
-            <p>Scanning successful! Use the code above on your login screen.</p>
         </div>
     `);
 });
@@ -38,12 +42,12 @@ const otpStore = {};
 app.post('/generate', async (req, res) => {
     const { userId } = req.body;
     const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false });
+    
+    // Store OTP with 5-minute expiry
     otpStore[userId] = { otp, expires: Date.now() + 300000 };
 
     try {
         const qrOptions = { color: { dark: '#003366', light: '#F0F0F0' }, width: 300 };
-        
-        // --- FIX 2: Your LIVE Vercel link ---
         const autoFillUrl = `https://qr-otp-system-g32y.vercel.app/verify-page?otp=${otp}`;
         
         const qrImage = await QRCode.toDataURL(autoFillUrl, qrOptions);
@@ -59,19 +63,10 @@ app.post('/verify', (req, res) => {
     const record = otpStore[userId];
 
     if (!record || Date.now() > record.expires) {
-        return res.status(400).json({ message: "OTP Expired or Invalid" });
+        return res.status(400).json({ success: false, message: "OTP Expired or Invalid" });
     }
 
     if (record.otp === userOtp) {
-        delete otpStore[userId];
+        delete otpStore[userId]; // Delete after success for security
         res.json({ success: true, message: "Verified!" });
     } else {
-        res.status(400).json({ message: "Wrong OTP" });
-    }
-});
-
-// --- FINAL FIX: Listen and Export ---
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-module.exports = app; // <--- THIS LINE IS THE KEY FOR VERCEL
