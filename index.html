@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CEMA Cyber Dashboard</title>
+    <title>Kemong Cyber Dashboard</title>
     <style>
         :root { --primary: #003366; --bg: #f0f2f5; --text: #333; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; background: var(--bg); color: var(--text); }
@@ -37,12 +37,12 @@
         
         <div style="background: white; padding: 10px; border-radius: 10px; margin-bottom: 20px;">
             <div id="login-qr-container">
-                <p style="color: #333; margin: 10px;">Click generate to scan</p>
+                <p style="color: #333; margin: 10px;">QR CODE GENERATED</p>
             </div>
         </div>
         <button onclick="generateDashboardQR('login-qr-container')" style="margin-bottom: 20px; background: #f39c12;">GENERATE QR TO SCAN</button>
         <p>Enter the 6-digit OTP from your mobile scan:</p>
-        <input type="text" id="otp-input" placeholder="000000" style="margin-bottom: 10px; background: #b100f7;">
+        <input type="text" id="otp-input" placeholder="000000" style="margin-bottom: 10px; background: #000000;">
         <button onclick="verifyAndEnter()" style="margin-bottom: 18px; background: #b100f7;">VERIFY & ENTER DASHBOARD</button>
     </div>
 
