@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CEMA Premium Auth & Terminal</title>
     <style>
         :root {
@@ -13,14 +13,22 @@
             --dark: #1A1A1A;
         }
 
+        /* Essential Mobile Reset */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
             margin: 0;
             background-color: var(--bg-soft);
             color: var(--text-main);
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         /* --- LOGIN OVERLAY --- */
@@ -32,22 +40,24 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
+            padding: env(safe-area-inset-top, 40px) 20px 20px;
+            overflow-y: auto;
         }
 
         .login-card {
             background: var(--white);
             width: 100%;
-            max-width: 350px;
-            padding: 30px;
-            border-radius: 30px;
-            box-shadow: 0 10px 25px rgba(255, 75, 92, 0.1);
+            max-width: 380px;
+            padding: 30px 20px;
+            border-radius: 35px;
+            box-shadow: 0 10px 30px rgba(255, 75, 92, 0.12);
             text-align: center;
+            margin-bottom: 20px;
         }
 
         .logo-circle {
-            width: 80px;
-            height: 80px;
+            width: 75px;
+            height: 75px;
             background: var(--accent);
             border-radius: 50%;
             margin: 0 auto 20px;
@@ -57,40 +67,52 @@
             color: white;
             font-weight: bold;
             font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(255, 75, 92, 0.3);
         }
 
         input {
-            width: 80%;
-            padding: 15px;
+            width: 100%;
+            padding: 18px;
             border: 2px solid #FFE0E3;
-            border-radius: 15px;
-            margin: 20px 0;
-            font-size: 1.2rem;
+            border-radius: 20px;
+            margin: 15px 0;
+            font-size: 1.3rem;
             text-align: center;
             outline: none;
+            background: #fff;
+            transition: border 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--accent);
         }
 
         button {
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             background: var(--accent);
             color: white;
             border: none;
             border-radius: 50px;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.1s, opacity 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        button:active { transform: scale(0.98); }
+        button:active { transform: scale(0.97); opacity: 0.9; }
 
         /* --- DASHBOARD VIEW --- */
         .dashboard-content {
             display: none; 
             width: 100%;
-            max-width: 450px;
-            padding: 40px 20px;
+            max-width: 480px;
+            padding: env(safe-area-inset-top, 40px) 20px 40px;
         }
 
         .dash-header {
@@ -102,10 +124,11 @@
 
         .logout-btn {
             width: auto !important;
-            padding: 8px 20px !important;
+            padding: 10px 20px !important;
             background: #EEE !important;
             color: #333 !important;
-            font-size: 0.8rem !important;
+            font-size: 0.75rem !important;
+            border-radius: 12px;
         }
 
         .status-grid {
@@ -118,63 +141,75 @@
         .stat-box {
             background: var(--white);
             padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 24px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.04);
         }
 
         .stat-label {
-            font-size: 0.75rem;
-            color: #888;
+            font-size: 0.7rem;
+            color: #999;
             text-transform: uppercase;
-            display: block;
+            letter-spacing: 0.5px;
+            font-weight: 600;
         }
 
         .stat-value {
-            font-size: 1.4rem;
-            font-weight: bold;
+            font-size: 1.3rem;
+            font-weight: 800;
             margin-top: 5px;
         }
 
         /* --- LOGS & CARDS --- */
         .qr-card {
             background: white;
-            padding: 20px;
-            border-radius: 25px;
+            padding: 22px;
+            border-radius: 28px;
             text-align: left;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.04);
         }
 
         .log-entry {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             padding: 12px 0;
-            border-bottom: 1px solid #F8F8F8;
+            border-bottom: 1px solid #F6F6F6;
             display: flex;
+            align-items: flex-start;
         }
 
         .log-time {
             color: var(--accent);
             font-weight: bold;
-            min-width: 50px;
+            min-width: 45px;
         }
 
-        .log-text { color: #555; }
+        .log-text { color: #555; line-height: 1.4; }
 
         .secondary-btn {
             background: var(--dark) !important;
             font-size: 0.8rem !important;
-            padding: 12px !important;
-            margin-top: 10px;
+            padding: 15px !important;
+            margin-top: 12px;
+            border-radius: 18px !important;
         }
 
         #military-time {
-            font-family: monospace;
-            background: #333;
+            font-family: 'Courier New', Courier, monospace;
+            background: #222;
             color: #00FF00;
-            padding: 4px 10px;
-            border-radius: 5px;
+            padding: 8px 16px;
+            border-radius: 10px;
             font-size: 0.9rem;
-            margin-top: 10px;
-            display: inline-block;
+            margin-top: auto;
+            margin-bottom: 30px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Mobile specific font sizing */
+        @media (max-width: 480px) {
+            .stat-value { font-size: 1.1rem; }
+            .login-card { padding: 25px 15px; }
+            h2 { font-size: 1.4rem; }
         }
     </style>
 </head>
@@ -184,27 +219,27 @@
         <div class="logo-circle">MONG</div>
         <div class="login-card">
             <h2 style="margin-top:0">Secure Access</h2>
-            <p style="color: #888; font-size: 0.9rem;">Scan QR to sync mobile authenticator</p>
+            <p style="color: #888; font-size: 0.85rem; margin-bottom: 20px;">Scan QR to sync mobile authenticator</p>
             
             <div id="login-qr-spot" style="min-height: 180px; display: flex; align-items: center; justify-content: center;">
                 </div>
 
-            <button onclick="generateQR('login-qr-spot')" style="background: var(--dark); margin-bottom: 15px;">
+            <button onclick="generateQR('login-qr-spot')" style="background: var(--dark); margin-bottom: 10px;">
                 GENERATE SYSTEM QR
             </button>
 
-            <input type="text" id="otp-input" placeholder="000000" maxlength="6">
+            <input type="tel" id="otp-input" placeholder="000 000" maxlength="6" pattern="\d*">
             
             <button onclick="verifyAndEnter()">VERIFY & TERMINAL START</button>
         </div>
-        <div id="military-time">--:--:-- Z</div>
+        <div id="military-time">0000:00H</div>
     </div>
 
     <div class="dashboard-content" id="main-dash">
         <div class="dash-header">
             <div>
-                <h2 style="margin:0; color: var(--accent);">CEMA TERMINAL</h2>
-                <p style="margin:0; font-size: 0.75rem; color: #888;">ENCRYPTION: PQC-HYBRID ACTIVE</p>
+                <h2 style="margin:0; color: var(--accent); font-size: 1.5rem;">CEMA TERMINAL</h2>
+                <p style="margin:0; font-size: 0.7rem; color: #888; font-weight: bold;">PQC-HYBRID ENCRYPTION ACTIVE</p>
             </div>
             <button onclick="location.reload()" class="logout-btn">OFFLINE</button>
         </div>
@@ -221,7 +256,7 @@
         </div>
 
         <div class="qr-card">
-            <h3 style="margin:0 0 15px 0; font-size: 1rem;">SEC-OPS ACTIVITY LOG</h3>
+            <h3 style="margin:0 0 15px 0; font-size: 0.9rem; letter-spacing: 1px;">SEC-OPS ACTIVITY LOG</h3>
             <div id="log-container">
                 <div class="log-entry">
                     <span class="log-time">0845</span>
@@ -241,7 +276,7 @@
                 </div>
             </div>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px;">
                 <button class="secondary-btn" onclick="alert('Network Scan Initiated...')">SCAN NET</button>
                 <button class="secondary-btn" onclick="alert('Report exported to BSEP/SEC-DRIVE')">EXPORT</button>
             </div>
@@ -272,7 +307,7 @@
                 const data = await res.json();
                 if(data.qrCode) {
                     document.getElementById(containerId).innerHTML = 
-                        `<img src="${data.qrCode}" width="180" style="border-radius:15px; border: 5px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">`;
+                        `<img src="${data.qrCode}" width="160" style="border-radius:15px; border: 4px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">`;
                 }
             } catch (err) {
                 alert("Connection to BSEP-API failed.");
