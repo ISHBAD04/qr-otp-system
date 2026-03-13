@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CEMA Premium Auth</title>
+    <title>CEMA Premium Auth & Terminal</title>
     <style>
         :root {
-            --accent: #FF4B5C; /* The Domino's Red */
+            --accent: #FF4B5C; 
             --bg-soft: #FFF5F6;
             --text-main: #2D2D2D;
             --white: #FFFFFF;
+            --dark: #1A1A1A;
         }
 
         body {
@@ -19,9 +20,10 @@
             color: var(--text-main);
             display: flex;
             justify-content: center;
+            min-height: 100vh;
         }
 
-        /* Login Overlay Styling */
+        /* --- LOGIN OVERLAY --- */
         #login-overlay {
             position: fixed;
             inset: 0;
@@ -57,7 +59,6 @@
             font-size: 1.2rem;
         }
 
-        /* Inputs & Buttons */
         input {
             width: 80%;
             padding: 15px;
@@ -84,26 +85,96 @@
 
         button:active { transform: scale(0.98); }
 
-        /* Dashboard View */
+        /* --- DASHBOARD VIEW --- */
         .dashboard-content {
-            display: none; /* Hidden until login */
+            display: none; 
             width: 100%;
-            max-width: 400px;
-            padding: 20px;
+            max-width: 450px;
+            padding: 40px 20px;
         }
 
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .logout-btn {
+            width: auto !important;
+            padding: 8px 20px !important;
+            background: #EEE !important;
+            color: #333 !important;
+            font-size: 0.8rem !important;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            display: block;
+        }
+
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* --- LOGS & CARDS --- */
         .qr-card {
             background: white;
             padding: 20px;
             border-radius: 25px;
-            text-align: center;
-            margin-top: 20px;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        #qr-container img {
-            border-radius: 20px;
-            margin: 15px 0;
-            border: 4px solid var(--bg-soft);
+        .log-entry {
+            font-size: 0.8rem;
+            padding: 12px 0;
+            border-bottom: 1px solid #F8F8F8;
+            display: flex;
+        }
+
+        .log-time {
+            color: var(--accent);
+            font-weight: bold;
+            min-width: 50px;
+        }
+
+        .log-text { color: #555; }
+
+        .secondary-btn {
+            background: var(--dark) !important;
+            font-size: 0.8rem !important;
+            padding: 12px !important;
+            margin-top: 10px;
+        }
+
+        #military-time {
+            font-family: monospace;
+            background: #333;
+            color: #00FF00;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: inline-block;
         }
     </style>
 </head>
@@ -112,61 +183,122 @@
     <div id="login-overlay">
         <div class="logo-circle">CEMA</div>
         <div class="login-card">
-            <h2 style="margin-top:0">Welcome back!</h2>
-            <p style="color: #888;">Generate the QR below to get your OTP</p>
+            <h2 style="margin-top:0">Secure Access</h2>
+            <p style="color: #888; font-size: 0.9rem;">Scan QR to sync mobile authenticator</p>
             
-            <div id="login-qr-spot">
+            <div id="login-qr-spot" style="min-height: 180px; display: flex; align-items: center; justify-content: center;">
                 </div>
 
-            <button onclick="generateQR('login-qr-spot')" style="background: #333; margin-bottom: 15px;">
-                1. GENERATE QR
+            <button onclick="generateQR('login-qr-spot')" style="background: var(--dark); margin-bottom: 15px;">
+                1. GENERATE SYSTEM QR
             </button>
 
-            <input type="text" id="otp-input" placeholder="Enter 6-digit OTP">
+            <input type="text" id="otp-input" placeholder="000000" maxlength="6">
             
-            <button onclick="verifyAndEnter()">2. VERIFY & ENTER</button>
+            <button onclick="verifyAndEnter()">2. VERIFY & TERMINAL START</button>
         </div>
+        <div id="military-time">--:--:-- Z</div>
     </div>
 
     <div class="dashboard-content" id="main-dash">
-        <h2 style="color: var(--accent)">Hello, Admin!</h2>
+        <div class="dash-header">
+            <div>
+                <h2 style="margin:0; color: var(--accent);">CEMA TERMINAL</h2>
+                <p style="margin:0; font-size: 0.75rem; color: #888;">ENCRYPTION: PQC-HYBRID ACTIVE</p>
+            </div>
+            <button onclick="location.reload()" class="logout-btn">OFFLINE</button>
+        </div>
+
+        <div class="status-grid">
+            <div class="stat-box">
+                <span class="stat-label">Network Load</span>
+                <div class="stat-value">24%</div>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Active Threats</span>
+                <div class="stat-value" style="color: var(--accent);">02</div>
+            </div>
+        </div>
+
         <div class="qr-card">
-            <h3>Security Hub</h3>
-            <p>Scan successful! You are now logged into the secure terminal.</p>
-            <button onclick="location.reload()" style="background: #eee; color: #333;">LOGOUT</button>
+            <h3 style="margin:0 0 15px 0; font-size: 1rem;">SEC-OPS ACTIVITY LOG</h3>
+            <div id="log-container">
+                <div class="log-entry">
+                    <span class="log-time">0845</span>
+                    <span class="log-text">PrivX: Passwordless session established via Admin_User</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">0812</span>
+                    <span class="log-text">C-Think: Strategic Dark-Web scrape completed (0 flags)</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">0730</span>
+                    <span class="log-text">Quantum-Safe Handshake: Hybrid-Kyber exchange verified</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">0600</span>
+                    <span class="log-text">System Boot: Integrity Check 100% (BSEP/CEMA)</span>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                <button class="secondary-btn" onclick="alert('Network Scan Initiated...')">SCAN NET</button>
+                <button class="secondary-btn" onclick="alert('Report exported to BSEP/SEC-DRIVE')">EXPORT</button>
+            </div>
         </div>
     </div>
 
     <script>
         const API_BASE = "https://qr-otp-system-g32y.vercel.app";
 
+        // MILITARY CLOCK LOGIC
+        function updateClock() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('military-time').innerText = `${h}${m}:${s}H`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
         async function generateQR(containerId) {
-            const res = await fetch(`${API_BASE}/generate`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: 'Admin_User' })
-            });
-            const data = await res.json();
-            if(data.qrCode) {
-                document.getElementById(containerId).innerHTML = 
-                    `<img src="${data.qrCode}" width="180">`;
+            try {
+                const res = await fetch(`${API_BASE}/generate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: 'Admin_User' })
+                });
+                const data = await res.json();
+                if(data.qrCode) {
+                    document.getElementById(containerId).innerHTML = 
+                        `<img src="${data.qrCode}" width="180" style="border-radius:15px; border: 5px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">`;
+                }
+            } catch (err) {
+                alert("Connection to BSEP-API failed.");
             }
         }
 
         async function verifyAndEnter() {
             const otp = document.getElementById('otp-input').value;
-            const res = await fetch(`${API_BASE}/verify`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: 'Admin_User', userOtp: otp })
-            });
-            const data = await res.json();
+            if(!otp) return alert("Please input OTP from Authenticator");
 
-            if (data.success) {
-                document.getElementById('login-overlay').style.display = 'none';
-                document.getElementById('main-dash').style.display = 'block';
-            } else {
-                alert("Invalid OTP");
+            try {
+                const res = await fetch(`${API_BASE}/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: 'Admin_User', userOtp: otp })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    document.getElementById('login-overlay').style.display = 'none';
+                    document.getElementById('main-dash').style.display = 'block';
+                } else {
+                    alert("ACCESS DENIED: Invalid Security Token");
+                }
+            } catch (err) {
+                alert("Verification Server Offline");
             }
         }
     </script>
