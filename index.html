@@ -13,7 +13,6 @@
             --dark: #1A1A1A;
         }
 
-        /* Essential Mobile Reset */
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
@@ -29,6 +28,17 @@
             min-height: 100vh;
             width: 100%;
             overflow-x: hidden;
+        }
+
+        /* --- BUBBLE CANVAS --- */
+        #bubble-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allows clicking through the bubbles */
+            z-index: 9999;
         }
 
         /* --- LOGIN OVERLAY --- */
@@ -67,7 +77,6 @@
             color: white;
             font-weight: bold;
             font-size: 1.2rem;
-            box-shadow: 0 4px 10px rgba(255, 75, 92, 0.3);
         }
 
         input {
@@ -79,12 +88,6 @@
             font-size: 1.3rem;
             text-align: center;
             outline: none;
-            background: #fff;
-            transition: border 0.3s;
-        }
-
-        input:focus {
-            border-color: var(--accent);
         }
 
         button {
@@ -97,15 +100,11 @@
             font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        button:active { transform: scale(0.97); opacity: 0.9; }
+        button:active { transform: scale(0.97); }
 
         /* --- DASHBOARD VIEW --- */
         .dashboard-content {
@@ -122,15 +121,6 @@
             margin-bottom: 25px;
         }
 
-        .logout-btn {
-            width: auto !important;
-            padding: 10px 20px !important;
-            background: #EEE !important;
-            color: #333 !important;
-            font-size: 0.75rem !important;
-            border-radius: 12px;
-        }
-
         .status-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -145,26 +135,13 @@
             box-shadow: 0 6px 15px rgba(0,0,0,0.04);
         }
 
-        .stat-label {
-            font-size: 0.7rem;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
+        .stat-label { font-size: 0.7rem; color: #999; text-transform: uppercase; font-weight: 600; }
+        .stat-value { font-size: 1.3rem; font-weight: 800; margin-top: 5px; }
 
-        .stat-value {
-            font-size: 1.3rem;
-            font-weight: 800;
-            margin-top: 5px;
-        }
-
-        /* --- LOGS & CARDS --- */
         .qr-card {
             background: white;
             padding: 22px;
             border-radius: 28px;
-            text-align: left;
             box-shadow: 0 6px 15px rgba(0,0,0,0.04);
         }
 
@@ -173,16 +150,10 @@
             padding: 12px 0;
             border-bottom: 1px solid #F6F6F6;
             display: flex;
-            align-items: flex-start;
         }
 
-        .log-time {
-            color: var(--accent);
-            font-weight: bold;
-            min-width: 45px;
-        }
-
-        .log-text { color: #555; line-height: 1.4; }
+        .log-time { color: var(--accent); font-weight: bold; min-width: 45px; }
+        .log-text { color: #555; }
 
         .secondary-btn {
             background: var(--dark) !important;
@@ -192,45 +163,39 @@
             border-radius: 18px !important;
         }
 
+        .bubble-trigger-btn {
+            background: #6C5CE7 !important; /* Distinct Purple Color */
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        }
+
         #military-time {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: monospace;
             background: #222;
             color: #00FF00;
             padding: 8px 16px;
             border-radius: 10px;
-            font-size: 0.9rem;
             margin-top: auto;
             margin-bottom: 30px;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        /* Mobile specific font sizing */
         @media (max-width: 480px) {
             .stat-value { font-size: 1.1rem; }
-            .login-card { padding: 25px 15px; }
-            h2 { font-size: 1.4rem; }
         }
     </style>
 </head>
 <body>
 
+    <canvas id="bubble-canvas"></canvas>
+
     <div id="login-overlay">
         <div class="logo-circle">MONG</div>
         <div class="login-card">
-            <h2 style="margin-top:0">Secure Access</h2>
-            <p style="color: #888; font-size: 0.85rem; margin-bottom: 20px;">Scan QR to sync mobile authenticator</p>
-            
-            <div id="login-qr-spot" style="min-height: 180px; display: flex; align-items: center; justify-content: center;">
-                </div>
-
-            <button onclick="generateQR('login-qr-spot')" style="background: var(--dark); margin-bottom: 10px;">
-                GENERATE SYSTEM QR
-            </button>
-
-            <input type="tel" id="otp-input" placeholder="000 000" maxlength="6" pattern="\d*">
-            
-            <button onclick="verifyAndEnter()">VERIFY & TERMINAL START</button>
+            <h2>Secure Access</h2>
+            <div id="login-qr-spot" style="min-height: 180px; display: flex; align-items: center; justify-content: center;"></div>
+            <button onclick="generateQR('login-qr-spot')" style="background: var(--dark); margin-bottom: 10px;">GENERATE QR</button>
+            <input type="tel" id="otp-input" placeholder="000 000" maxlength="6">
+            <button onclick="verifyAndEnter()">VERIFY & START</button>
         </div>
         <div id="military-time">0000:00H</div>
     </div>
@@ -238,103 +203,115 @@
     <div class="dashboard-content" id="main-dash">
         <div class="dash-header">
             <div>
-                <h2 style="margin:0; color: var(--accent); font-size: 1.5rem;">MONG TERMINAL</h2>
-                <p style="margin:0; font-size: 0.7rem; color: #888; font-weight: bold;">PQC-HYBRID ENCRYPTION ACTIVE</p>
+                <h2 style="margin:0; color: var(--accent);">MONG TERMINAL</h2>
+                <p style="margin:0; font-size: 0.7rem; color: #888;">PQC-HYBRID ACTIVE</p>
             </div>
-            <button onclick="location.reload()" class="logout-btn">LOG OUT</button>
+            <button onclick="location.reload()" style="width:auto; padding:8px 15px; font-size:0.7rem; background:#EEE; color:#333;">LOG OUT</button>
         </div>
 
         <div class="status-grid">
-            <div class="stat-box">
-                <span class="stat-label">Network Load</span>
-                <div class="stat-value">24%</div>
-            </div>
-            <div class="stat-box">
-                <span class="stat-label">Active Threats</span>
-                <div class="stat-value" style="color: var(--accent);">02</div>
-            </div>
+            <div class="stat-box"><span class="stat-label">Network</span><div class="stat-value">24%</div></div>
+            <div class="stat-box"><span class="stat-label">Threats</span><div class="stat-value" style="color: var(--accent);">02</div></div>
         </div>
 
         <div class="qr-card">
-            <h3 style="margin:0 0 15px 0; font-size: 0.9rem; letter-spacing: 1px;">SEC-OPS ACTIVITY LOG</h3>
+            <h3 style="font-size: 0.9rem;">SEC-OPS ACTIVITY LOG</h3>
             <div id="log-container">
-                <div class="log-entry">
-                    <span class="log-time">0845</span>
-                    <span class="log-text">PrivX: Passwordless session established via Admin_User</span>
-                </div>
-                <div class="log-entry">
-                    <span class="log-time">0812</span>
-                    <span class="log-text">C-Think: Strategic Dark-Web scrape completed (0 flags)</span>
-                </div>
-                <div class="log-entry">
-                    <span class="log-time">0730</span>
-                    <span class="log-text">Quantum-Safe Handshake: Hybrid-Kyber exchange verified</span>
-                </div>
-                <div class="log-entry">
-                    <span class="log-time">0600</span>
-                    <span class="log-text">System Boot: Integrity Check 100% (BSEP/CEMA)</span>
-                </div>
+                <div class="log-entry"><span class="log-time">0845</span><span class="log-text">Session established</span></div>
+                <div class="log-entry"><span class="log-time">0730</span><span class="log-text">Quantum-Safe Verified</span></div>
             </div>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px;">
-                <button class="secondary-btn" onclick="alert('Network Scan Initiated...')">SCAN NET</button>
-                <button class="secondary-btn" onclick="alert('Report exported to BSEP/SEC-DRIVE')">EXPORT</button>
+            <button class="bubble-trigger-btn" onclick="startBubbles()">ACTIVATE BUBBLE UI</button>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;">
+                <button class="secondary-btn" onclick="alert('Scanning...')">SCAN</button>
+                <button class="secondary-btn" onclick="alert('Exported')">EXPORT</button>
             </div>
         </div>
     </div>
 
     <script>
         const API_BASE = "https://qr-otp-system-g32y.vercel.app";
+        
+        // --- BUBBLE ANIMATION ENGINE ---
+        const canvas = document.getElementById('bubble-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
 
-        // MILITARY CLOCK LOGIC
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Bubble {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 100;
+                this.radius = Math.random() * 15 + 5;
+                this.speed = Math.random() * 3 + 2;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.wobble = Math.random() * 0.05;
+                this.wobbleInc = 0;
+            }
+            update() {
+                this.y -= this.speed;
+                this.x += Math.sin(this.wobbleInc) * 2;
+                this.wobbleInc += this.wobble;
+                if (this.y < -50) this.reset();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 75, 92, ${this.opacity})`;
+                ctx.fill();
+                ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity + 0.2})`;
+                ctx.stroke();
+            }
+        }
+
+        function startBubbles() {
+            if(particles.length > 0) return; // Prevent multiple clicks
+            for(let i = 0; i < 40; i++) {
+                particles.push(new Bubble());
+            }
+            animate();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        // --- EXISTING LOGIC ---
         function updateClock() {
             const now = new Date();
-            const h = String(now.getHours()).padStart(2, '0');
-            const m = String(now.getMinutes()).padStart(2, '0');
-            const s = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('military-time').innerText = `${h}${m}:${s}H`;
+            document.getElementById('military-time').innerText = `${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}H`;
         }
         setInterval(updateClock, 1000);
-        updateClock();
 
-        async function generateQR(containerId) {
-            try {
-                const res = await fetch(`${API_BASE}/generate`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId: 'Admin_User' })
-                });
-                const data = await res.json();
-                if(data.qrCode) {
-                    document.getElementById(containerId).innerHTML = 
-                        `<img src="${data.qrCode}" width="160" style="border-radius:15px; border: 4px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">`;
-                }
-            } catch (err) {
-                alert("Connection to BSEP-API failed.");
-            }
+        async function generateQR(id) {
+            const res = await fetch(`${API_BASE}/generate`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({userId: 'Admin_User'})});
+            const data = await res.json();
+            if(data.qrCode) document.getElementById(id).innerHTML = `<img src="${data.qrCode}" width="160" style="border-radius:15px; border:4px solid #fff;">`;
         }
 
         async function verifyAndEnter() {
             const otp = document.getElementById('otp-input').value;
-            if(!otp) return alert("Please input OTP from Authenticator");
-
-            try {
-                const res = await fetch(`${API_BASE}/verify`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId: 'Admin_User', userOtp: otp })
-                });
-                const data = await res.json();
-
-                if (data.success) {
-                    document.getElementById('login-overlay').style.display = 'none';
-                    document.getElementById('main-dash').style.display = 'block';
-                } else {
-                    alert("ACCESS DENIED: Invalid Security Token");
-                }
-            } catch (err) {
-                alert("Verification Server Offline");
-            }
+            const res = await fetch(`${API_BASE}/verify`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({userId: 'Admin_User', userOtp: otp})});
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('main-dash').style.display = 'block';
+            } else alert("Denied");
         }
     </script>
 </body>
