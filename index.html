@@ -30,18 +30,16 @@
             overflow-x: hidden;
         }
 
-        /* --- BUBBLE CANVAS --- */
         #bubble-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Allows clicking through the bubbles */
+            pointer-events: none;
             z-index: 9999;
         }
 
-        /* --- LOGIN OVERLAY --- */
         #login-overlay {
             position: fixed;
             inset: 0;
@@ -81,11 +79,11 @@
 
         input {
             width: 100%;
-            padding: 18px;
+            padding: 15px;
             border: 2px solid #FFE0E3;
-            border-radius: 20px;
-            margin: 15px 0;
-            font-size: 1.3rem;
+            border-radius: 15px;
+            margin: 8px 0;
+            font-size: 1rem;
             text-align: center;
             outline: none;
         }
@@ -102,6 +100,7 @@
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin-top: 10px;
         }
 
         button:active { transform: scale(0.97); }
@@ -155,20 +154,6 @@
         .log-time { color: var(--accent); font-weight: bold; min-width: 45px; }
         .log-text { color: #555; }
 
-        .secondary-btn {
-            background: var(--dark) !important;
-            font-size: 0.8rem !important;
-            padding: 15px !important;
-            margin-top: 12px;
-            border-radius: 18px !important;
-        }
-
-        .bubble-trigger-btn {
-            background: #6C5CE7 !important; /* Distinct Purple Color */
-            margin-top: 15px;
-            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
-        }
-
         #military-time {
             font-family: monospace;
             background: #222;
@@ -177,10 +162,6 @@
             border-radius: 10px;
             margin-top: auto;
             margin-bottom: 30px;
-        }
-
-        @media (max-width: 480px) {
-            .stat-value { font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -192,26 +173,32 @@
         <div class="logo-circle">MONG</div>
         <div class="login-card">
             <div style="display: flex; gap: 8px; margin-bottom: 20px; background: #F0F0F0; padding: 5px; border-radius: 15px;">
-                <button id="tab-login" onclick="switchAuthMode('login')" style="padding: 10px; font-size: 0.7rem; background: var(--dark); border-radius: 12px; color: white;">LOGIN</button>
-                <button id="tab-register" onclick="switchAuthMode('register')" style="padding: 10px; font-size: 0.7rem; background: transparent; color: #555; border-radius: 12px;">REGISTER</button>
+                <button id="tab-login" onclick="switchAuthMode('login')" style="padding: 10px; font-size: 0.7rem; background: var(--dark); border-radius: 12px; color: white; margin:0;">LOGIN</button>
+                <button id="tab-register" onclick="switchAuthMode('register')" style="padding: 10px; font-size: 0.7rem; background: transparent; color: #555; border-radius: 12px; margin:0;">REGISTER</button>
             </div>
 
             <h2 id="auth-title">Secure Access</h2>
-            <p id="auth-desc" style="font-size: 0.8rem; color: #888; margin-top: -10px;">Verify identity to access terminal</p>
-
-            <div id="login-qr-spot" style="min-height: 180px; display: flex; align-items: center; justify-content: center; border: 2px dashed #FFE0E3; border-radius: 20px; margin: 10px 0;">
-                <span style="color: #CCC; font-size: 0.8rem;">System Idle</span>
-            </div>
+            <p id="auth-desc" style="font-size: 0.8rem; color: #888; margin-top: -10px;">Enter credentials to begin</p>
 
             <div id="reg-controls" style="display: none;">
-                <input type="text" id="reg-username" placeholder="New Username" style="font-size: 1.1rem; margin: 10px 0;">
-                <button onclick="handleRegister()" style="background: var(--dark);">INITIALIZE IDENTITY</button>
+                <input type="text" id="reg-username" placeholder="Username">
+                <input type="email" id="reg-email" placeholder="Email Address">
+                <input type="password" id="reg-password" placeholder="Password">
+                <button onclick="handleRegister()" style="background: var(--dark);">CREATE ACCOUNT</button>
             </div>
 
             <div id="login-controls">
-                <button onclick="generateQR('login-qr-spot')" style="background: var(--dark); margin-bottom: 10px;">GENERATE LOGIN QR</button>
-                <input type="tel" id="otp-input" placeholder="000 000" maxlength="6">
-                <button onclick="verifyAndEnter()">VERIFY & START</button>
+                <input type="text" id="login-username" placeholder="Username">
+                <input type="password" id="login-password" placeholder="Password">
+                
+                <div id="login-qr-container" style="display: none; margin: 15px 0;">
+                    <div id="login-qr-spot" style="min-height: 160px; display: flex; align-items: center; justify-content: center; border: 2px dashed #FFE0E3; border-radius: 20px;"></div>
+                    <p style="font-size: 0.7rem; color: var(--accent); margin-top: 10px;">Check email for verification QR</p>
+                    <input type="tel" id="otp-input" placeholder="Enter 6-digit OTP" maxlength="6">
+                </div>
+
+                <button id="login-btn" onclick="requestVerification()">LOGIN</button>
+                <button id="verify-btn" onclick="verifyAndEnter()" style="display: none;">VERIFY OTP</button>
             </div>
         </div>
         <div id="military-time">0000:00H</div>
@@ -237,27 +224,23 @@
                 <div class="log-entry"><span class="log-time">0845</span><span class="log-text">Session established</span></div>
                 <div class="log-entry"><span class="log-time">0730</span><span class="log-text">Quantum-Safe Verified</span></div>
             </div>
-            
-            <button class="bubble-trigger-btn" onclick="startBubbles()">ACTIVATE BUBBLE UI</button>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;">
-                <button class="secondary-btn" onclick="alert('Scanning...')">SCAN</button>
-                <button class="secondary-btn" onclick="alert('Exported')">EXPORT</button>
-            </div>
+            <button style="background: #6C5CE7; margin-top: 15px;" onclick="startBubbles()">ACTIVATE BUBBLE UI</button>
         </div>
     </div>
 
     <script>
         const API_BASE = "https://qr-otp-system-g32y.vercel.app";
         
-        // --- AUTH LOGIC ---
         function switchAuthMode(mode) {
             const isReg = mode === 'register';
             document.getElementById('reg-controls').style.display = isReg ? 'block' : 'none';
             document.getElementById('login-controls').style.display = isReg ? 'none' : 'block';
             document.getElementById('auth-title').innerText = isReg ? 'Register User' : 'Secure Access';
-            document.getElementById('auth-desc').innerText = isReg ? 'Initialize a new PQC-safe profile' : 'Verify identity to access terminal';
-            document.getElementById('login-qr-spot').innerHTML = '<span style="color: #CCC; font-size: 0.8rem;">System Idle</span>';
+            
+            // Reset login view state
+            document.getElementById('login-qr-container').style.display = 'none';
+            document.getElementById('login-btn').style.display = 'block';
+            document.getElementById('verify-btn').style.display = 'none';
 
             const loginBtn = document.getElementById('tab-login');
             const regBtn = document.getElementById('tab-register');
@@ -269,33 +252,47 @@
 
         async function handleRegister() {
             const username = document.getElementById('reg-username').value;
-            if (!username) return alert("Please enter a username");
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            if (!username || !email || !password) return alert("Fill all fields");
+
             const res = await fetch(`${API_BASE}/generate`, { 
                 method: 'POST', 
                 headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify({ userId: username })
+                body: JSON.stringify({ userId: username, email: email, password: password })
             });
             const data = await res.json();
             if (data.qrCode) {
-                document.getElementById('login-qr-spot').innerHTML = `<img src="${data.qrCode}" width="160" style="border-radius:15px; border:4px solid #fff;">`;
-                alert("Scan the QR code, then switch to the Login tab.");
+                alert("Registration successful! Verify via the QR sent to your email.");
+                switchAuthMode('login');
             }
         }
 
-        async function generateQR(id) {
-            const user = document.getElementById('reg-username').value || 'Admin_User';
+        async function requestVerification() {
+            const user = document.getElementById('login-username').value;
+            const pass = document.getElementById('login-password').value;
+            if (!user || !pass) return alert("Enter credentials");
+
+            // Show QR section and switch buttons
+            document.getElementById('login-qr-container').style.display = 'block';
+            document.getElementById('login-btn').style.display = 'none';
+            document.getElementById('verify-btn').style.display = 'block';
+
             const res = await fetch(`${API_BASE}/generate`, { 
                 method: 'POST', 
                 headers: {'Content-Type': 'application/json'}, 
                 body: JSON.stringify({userId: user})
             });
             const data = await res.json();
-            if(data.qrCode) document.getElementById(id).innerHTML = `<img src="${data.qrCode}" width="160" style="border-radius:15px; border:4px solid #fff;">`;
+            if(data.qrCode) {
+                document.getElementById('login-qr-spot').innerHTML = `<img src="${data.qrCode}" width="140" style="border-radius:10px;">`;
+            }
         }
 
         async function verifyAndEnter() {
             const otp = document.getElementById('otp-input').value;
-            const user = document.getElementById('reg-username').value || 'Admin_User';
+            const user = document.getElementById('login-username').value;
             const res = await fetch(`${API_BASE}/verify`, { 
                 method: 'POST', 
                 headers: {'Content-Type': 'application/json'}, 
@@ -305,10 +302,16 @@
             if (data.success) {
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('main-dash').style.display = 'block';
-            } else alert("Denied");
+            } else alert("Invalid OTP");
         }
 
-        // --- BUBBLE ENGINE ---
+        // --- BUBBLE & CLOCK ENGINE ---
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('military-time').innerText = `${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}H`;
+        }
+        setInterval(updateClock, 1000);
+
         const canvas = document.getElementById('bubble-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -324,13 +327,12 @@
                 this.radius = Math.random() * 15 + 5;
                 this.speed = Math.random() * 3 + 2;
                 this.opacity = Math.random() * 0.5 + 0.1;
-                this.wobble = Math.random() * 0.05;
                 this.wobbleInc = 0;
             }
             update() {
                 this.y -= this.speed;
                 this.x += Math.sin(this.wobbleInc) * 2;
-                this.wobbleInc += this.wobble;
+                this.wobbleInc += 0.05;
                 if (this.y < -50) this.reset();
             }
             draw() {
@@ -351,14 +353,6 @@
             }
             animate();
         }
-
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('military-time').innerText = `${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}H`;
-        }
-        setInterval(updateClock, 1000);
     </script>
 </body>
 </html>
-
-
