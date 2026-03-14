@@ -1,3 +1,4 @@
+const nodemailer = require('nodemailer');
 const express = require('express');
 const QRCode = require('qrcode');
 const otpGenerator = require('otp-generator');
@@ -40,16 +41,54 @@ app.post('/generate', async (req, res) => {
     }
 });
 
-app.post('/verify', (req, res) => {
-    const { userId, userOtp } = req.body;
+app.post('/generate', async (req, res) => {
+    // 1. Get email and userId from the request body
+    const { userId, email } = req.body; 
     const id = userId || 'Admin_User';
-    const record = otpStore[id];
+    
+    // 2. Generate the 6-digit OTP
+    const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false });
+    otpStore[id] = { otp, expires: Date.now() + 300000 };
 
-    if (record && record.otp === userOtp) {
-        delete otpStore[id];
-        res.json({ success: true });
-    } else {
-        res.status(400).json({ success: false });
+    try {
+        const autoFillUrl = `https://qr-otp-system-g32y.vercel.app/verify-page?otp=${otp}`;
+        const qrImage = await QRCode.toDataURL(autoFillUrl);
+
+        // --- EMAIL SENDING LOGIC START ---
+        
+        // 3. Configure your SMTP Transporter (Example using Gmail)
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'YOUR_EMAIL@gmail.com', // Your system email
+                pass: 'YOUR_APP_PASSWORD'    // Your 16-character App Password
+            }
+        });
+
+        // 4. Set up the email content
+        const mailOptions = {
+            from: '"MONG Secure Access" <YOUR_EMAIL@gmail.com>',
+            to: email, // Sends to the email the user typed in the form
+            subject: 'Your Access QR Code',
+            text: `Hello ${id}, scan the attached QR code to receive your OTP.`,
+            attachments: [
+                {
+                    filename: 'access-qr.png',
+                    content: qrImage.split("base64,")[1],
+                    encoding: 'base64'
+                }
+            ]
+        };
+
+        // 5. Trigger the send
+        await transporter.sendMail(mailOptions);
+
+        // --- EMAIL SENDING LOGIC END ---
+
+        res.json({ otp, qrCode: qrImage, success: true });
+    } catch (err) {
+        console.error("Mail Error:", err);
+        res.status(500).json({ error: "Failed to generate or send email" });
     }
 });
 
