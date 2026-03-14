@@ -200,6 +200,104 @@
         <div id="military-time">0000:00H</div>
     </div>
 
+    <div class="login-card">
+        <div style="display: flex; gap: 8px; margin-bottom: 20px; background: #F0F0F0; padding: 5px; border-radius: 15px;">
+            <button id="tab-login" onclick="switchAuthMode('login')" style="padding: 10px; font-size: 0.7rem; background: var(--dark); border-radius: 12px;">LOGIN</button>
+            <button id="tab-register" onclick="switchAuthMode('register')" style="padding: 10px; font-size: 0.7rem; background: transparent; color: #555; border-radius: 12px;">REGISTER</button>
+        </div>
+
+        <h2 id="auth-title">Secure Access</h2>
+        <p id="auth-desc" style="font-size: 0.8rem; color: #888; margin-top: -10px;">Verify identity to access terminal</p>
+
+        <div id="login-qr-spot" style="min-height: 180px; display: flex; align-items: center; justify-content: center; border: 2px dashed #FFE0E3; border-radius: 20px; margin: 10px 0;">
+            <span style="color: #CCC; font-size: 0.8rem;">System Idle</span>
+        </div>
+
+        <div id="reg-controls" style="display: none;">
+            <input type="text" id="reg-username" placeholder="New Username" style="font-size: 1.1rem; margin: 10px 0;">
+            <button onclick="handleRegister()" style="background: var(--dark);">INITIALIZE IDENTITY</button>
+        </div>
+
+        <div id="login-controls">
+            <button onclick="generateQR('login-qr-spot')" style="background: var(--dark); margin-bottom: 10px;">GENERATE LOGIN QR</button>
+            <input type="tel" id="otp-input" placeholder="000 000" maxlength="6">
+            <button onclick="verifyAndEnter()">VERIFY & START</button>
+        </div>
+    </div>
+
+    <script>
+        // --- AUTHENTICATION MODE SWITCHING ---
+        function switchAuthMode(mode) {
+            const isReg = mode === 'register';
+            document.getElementById('reg-controls').style.display = isReg ? 'block' : 'none';
+            document.getElementById('login-controls').style.display = isReg ? 'none' : 'block';
+            
+            document.getElementById('auth-title').innerText = isReg ? 'Register User' : 'Secure Access';
+            document.getElementById('auth-desc').innerText = isReg ? 'Initialize a new PQC-safe profile' : 'Verify identity to access terminal';
+            document.getElementById('login-qr-spot').innerHTML = '<span style="color: #CCC; font-size: 0.8rem;">System Idle</span>';
+
+            // Update Tab Styles
+            const loginBtn = document.getElementById('tab-login');
+            const regBtn = document.getElementById('tab-register');
+            
+            if (isReg) {
+                regBtn.style.background = 'var(--dark)';
+                regBtn.style.color = 'white';
+                loginBtn.style.background = 'transparent';
+                loginBtn.style.color = '#555';
+            } else {
+                loginBtn.style.background = 'var(--dark)';
+                loginBtn.style.color = 'white';
+                regBtn.style.background = 'transparent';
+                regBtn.style.color = '#555';
+            }
+        }
+
+        // --- REGISTRATION LOGIC ---
+        async function handleRegister() {
+            const username = document.getElementById('reg-username').value;
+            if (!username) return alert("Please enter a username");
+
+            const res = await fetch(`${API_BASE}/generate`, { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify({ userId: username })
+            });
+            const data = await res.json();
+            
+            if (data.qrCode) {
+                document.getElementById('login-qr-spot').innerHTML = `
+                    <div style="text-align: center;">
+                        <img src="${data.qrCode}" width="160" style="border-radius:15px; border:4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                        <p style="font-size: 0.6rem; color: var(--accent); font-weight: bold; margin-top: 8px;">SCAN WITH AUTHENTICATOR APP</p>
+                    </div>`;
+                alert("Success! Scan the QR code, then switch to the Login tab.");
+            }
+        }
+
+        // --- UPDATED VERIFICATION LOGIC ---
+        async function verifyAndEnter() {
+            const otp = document.getElementById('otp-input').value;
+            // In a real app, you'd track which user is logging in. 
+            // For now, it checks the username from the reg field or defaults to Admin.
+            const user = document.getElementById('reg-username').value || 'Admin_User';
+            
+            const res = await fetch(`${API_BASE}/verify`, { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify({ userId: user, userOtp: otp })
+            });
+            
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('main-dash').style.display = 'block';
+            } else {
+                alert("Access Denied: Invalid Security Token");
+            }
+        }
+    </script>
+
     <div class="dashboard-content" id="main-dash">
         <div class="dash-header">
             <div>
@@ -316,3 +414,5 @@
     </script>
 </body>
 </html>
+
+
