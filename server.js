@@ -28,7 +28,7 @@ app.post('/generate', async (req, res) => {
                 service: 'gmail',
                 auth: {
                     user: 'ishbadhaikal@gmail.com', 
-                    pass: 'dxpc knjy hqpd faze' 
+                    pass: 'dxpcknjyhqpdfaze' 
                 }
             });
 
