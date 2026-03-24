@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MONG Premium Auth & Terminal</title>
+    <title>CEMA Auth Terminal</title>
     <style>
         :root {
             --accent: #FF4B5C; 
@@ -25,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* Shared UI Components */
         .card {
             background: var(--white);
             width: 90%;
@@ -37,11 +36,11 @@
             align-self: center;
         }
 
-        /* NEW LOGO STYLING */
+        /* Styling Logo CEMA */
         .auth-logo {
             display: block;
             width: 100%;
-            max-width: 150px; 
+            max-width: 160px; 
             height: auto;
             margin: 0 auto 15px;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
@@ -62,14 +61,13 @@
             cursor: pointer; margin-top: 10px;
         }
 
-        /* Section Visibility */
         #pc-view, #mobile-view, #main-dash { display: none; }
     </style>
 </head>
 <body>
 
     <div id="pc-view" class="card">
-        <img src="koko.png" alt="CEMA Logo" class="auth-logo">
+        <img src="./koko.png" alt="CEMA Logo" class="auth-logo">
         <h2>Secure Access</h2>
         <div id="login-form">
             <input type="text" id="login-username" placeholder="Username">
@@ -84,14 +82,14 @@
     </div>
 
     <div id="mobile-view" class="card">
-        <img src="koko.png" alt="CEMA Logo" class="auth-logo">
+        <img src="./koko.png" alt="CEMA Logo" class="auth-logo">
         <h2>Authorize Login?</h2>
-        <p style="color: #888;">Confirm to grant terminal access to this session.</p>
+        <p style="color: #888;">Confirm access for Cadet Officer terminal.</p>
         <button onclick="approveSession()" style="background: var(--dark);">APPROVE ACCESS</button>
     </div>
 
-    <div id="main-dash" style="padding: 40px; text-align: center; align-self: center;">
-        <img src="koko.png" alt="CEMA Logo" style="width: 100px; margin-bottom: 20px;">
+    <div id="main-dash" class="card">
+        <img src="./koko.png" alt="CEMA Logo" style="width: 100px; margin-bottom: 20px;">
         <h1 style="color: var(--accent);">TERMINAL ACTIVE</h1>
         <p>PQC-Hybrid Handshake Verified.</p>
         <button onclick="location.href='/'" style="width: auto; padding: 10px 40px;">LOGOUT</button>
@@ -102,7 +100,6 @@
         const params = new URLSearchParams(window.location.search);
         const sessionId = params.get('id');
 
-        // ROUTING LOGIC: Determine which view to show
         window.onload = () => {
             if (sessionId) {
                 document.getElementById('mobile-view').style.display = 'block';
@@ -111,7 +108,6 @@
             }
         };
 
-        // --- PC FUNCTIONS ---
         async function requestHandshake() {
             const user = document.getElementById('login-username').value;
             if (!user) return alert("Enter Username");
@@ -128,7 +124,6 @@
                 document.getElementById('qr-container').style.display = 'block';
                 document.getElementById('qr-spot').innerHTML = `<img src="${data.qrImage}" width="180">`;
 
-                // Poll for approval
                 const poll = setInterval(async () => {
                     const statusRes = await fetch(`${API_BASE}/check-status?id=${data.sessionId}`);
                     const status = await statusRes.json();
@@ -141,7 +136,6 @@
             }
         }
 
-        // --- MOBILE FUNCTIONS ---
         async function approveSession() {
             window.location.href = `${API_BASE}/approve-session?id=${sessionId}`;
         }
