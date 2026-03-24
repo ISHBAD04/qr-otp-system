@@ -4,6 +4,8 @@ const path = require('path');
 const app = express();
 
 app.use(express.json());
+
+// PENTING: Baris ni pastikan koko.png boleh dibaca oleh browser
 app.use(express.static(path.join(__dirname)));
 
 const activeSessions = {};
@@ -17,14 +19,14 @@ app.post('/request-session', async (req, res) => {
     const sessionId = Math.random().toString(36).substring(2, 10);
     activeSessions[sessionId] = { username, authorized: false };
 
-    // Point ke domain Vercel kau
+    // Gunakan domain Vercel kau yang terkini
     const authUrl = `https://qr-otp-system-g32y.vercel.app/?id=${sessionId}`;
     
     try {
         const qrImage = await QRCode.toDataURL(authUrl);
         res.json({ sessionId, qrImage });
     } catch (err) {
-        res.status(500).json({ error: "QR Error" });
+        res.status(500).json({ error: "QR Generation Failed" });
     }
 });
 
@@ -34,12 +36,12 @@ app.get('/approve-session', (req, res) => {
         activeSessions[id].authorized = true;
         res.send(`
             <body style="font-family:sans-serif; text-align:center; padding-top:50px; background:#FFF5F6;">
-                <h1 style="color:#FF4B5C;">✓ ACCESS GRANTED</h1>
-                <p>Terminal authorized. You can close this tab.</p>
+                <h1 style="color:#FF4B5C;">✓ PENGESAHAN BERJAYA</h1>
+                <p>Akses terminal telah dibenarkan. Anda boleh tutup tab ini.</p>
             </body>
         `);
     } else {
-        res.status(404).send("Session Expired.");
+        res.status(404).send("Sesi tamat tempoh.");
     }
 });
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CEMA Auth Terminal</title>
+    <title>CEMA Premium Auth</title>
     <style>
         :root {
             --accent: #FF4B5C; 
@@ -36,11 +36,10 @@
             align-self: center;
         }
 
-        /* Styling Logo CEMA */
         .auth-logo {
             display: block;
             width: 100%;
-            max-width: 160px; 
+            max-width: 150px; 
             height: auto;
             margin: 0 auto 15px;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
@@ -76,15 +75,15 @@
         
         <div id="qr-container" style="display: none; margin-top: 20px;">
             <div id="qr-spot"></div>
-            <p style="font-size: 0.8rem; color: var(--accent);">Scan with phone to authorize</p>
-            <div style="margin-top: 10px; font-family: monospace; color: #888;">WAITING FOR HANDSHAKE...</div>
+            <p style="font-size: 0.8rem; color: var(--accent);">Scan QR untuk pengesahan</p>
+            <div style="margin-top: 10px; font-family: monospace; color: #888;">WAITING...</div>
         </div>
     </div>
 
     <div id="mobile-view" class="card">
         <img src="./koko.png" alt="CEMA Logo" class="auth-logo">
         <h2>Authorize Login?</h2>
-        <p style="color: #888;">Confirm access for Cadet Officer terminal.</p>
+        <p style="color: #888;">Sahkan akses untuk terminal Pegawai Kadet.</p>
         <button onclick="approveSession()" style="background: var(--dark);">APPROVE ACCESS</button>
     </div>
 
@@ -92,7 +91,7 @@
         <img src="./koko.png" alt="CEMA Logo" style="width: 100px; margin-bottom: 20px;">
         <h1 style="color: var(--accent);">TERMINAL ACTIVE</h1>
         <p>PQC-Hybrid Handshake Verified.</p>
-        <button onclick="location.href='/'" style="width: auto; padding: 10px 40px;">LOGOUT</button>
+        <button onclick="location.href='/'" style="width: auto; padding: 10px 30px;">LOGOUT</button>
     </div>
 
     <script>
@@ -110,7 +109,7 @@
 
         async function requestHandshake() {
             const user = document.getElementById('login-username').value;
-            if (!user) return alert("Enter Username");
+            if (!user) return alert("Sila masukkan Username");
 
             const res = await fetch(`${API_BASE}/request-session`, {
                 method: 'POST',
