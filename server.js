@@ -1,7 +1,5 @@
-const nodemailer = require('nodemailer');
 const express = require('express');
 const QRCode = require('qrcode');
-const otpGenerator = require('otp-generator');
 const cors = require('cors');
 const path = require('path');
 
@@ -10,79 +8,59 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
-const otpStore = {}; 
+// Session store for Cadet Officer terminal access
+const activeSessions = {}; 
 
-// 1. Serve the main website
+// 1. Serve the Combined index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// 2. The page the USER sees on their PHONE after scanning
-app.get('/verify-page', (req, res) => {
-    const code = req.query.otp;
-    res.send(`
-        <html>
-        <body style="font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #FFF5F6;">
-            <div style="text-align: center; padding: 40px; background: white; border-radius: 30px; box-shadow: 0 10px 25px rgba(255,75,92,0.1);">
-                <div style="background: #FF4B5C; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-weight: bold;">MONG</div>
-                <h2 style="color: #2D2D2D;">Your Access Code</h2>
-                <h1 style="font-size: 3.5rem; color: #FF4B5C; letter-spacing: 8px; margin: 20px 0;">${code}</h1>
-                <p style="color: #888;">Enter this code on your computer terminal to finish logging in.</p>
-            </div>
-        </body>
-        </html>
-    `);
-});
+// 2. PC Initialization
+app.post('/request-session', async (req, res) => {
+    const { username } = req.body;
+    const sessionId = Math.random().toString(36).substring(2, 10);
+    activeSessions[sessionId] = { username, authorized: false };
 
-// 3. Register & Send QR to Email
-app.post('/generate', async (req, res) => {
-    const { userId, email } = req.body;
-    if (!userId || !email) return res.status(400).json({ error: "Username and Email required" });
-
-    const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false });
-    otpStore[userId] = { otp, expires: Date.now() + 600000 }; 
-
+    // Point the QR back to the main page with the ID parameter
+    const authUrl = `https://qr-otp-system-g32y.vercel.app/?id=${sessionId}`;
+    
     try {
-        // The QR code links to your live Vercel verify-page
-        const qrUrl = `https://qr-otp-system-g32y.vercel.app/verify-page?otp=${otp}`;
-        const qrImage = await QRCode.toDataURL(qrUrl);
-
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: 'ishbadhaikal@gmail.com', 
-                pass: 'dxpcknjyhqpdfaze' // Replace with your generated App Password
-            }
-        });
-
-        await transporter.sendMail({
-            from: '"MONG Secure Access" <ishbadhaikal@gmail.com>',
-            to: email,
-            subject: 'Your Personal MONG Access QR',
-            html: `<p>Hello <b>${userId}</b>,</p><p>Scan the attached QR code with your phone to reveal your 6-digit access token.</p>`,
-            attachments: [{
-                filename: 'access-qr.png',
-                content: qrImage.split("base64,")[1],
-                encoding: 'base64'
-            }]
-        });
-
-        res.json({ success: true, message: "QR Sent" });
+        const qrImage = await QRCode.toDataURL(authUrl);
+        res.json({ sessionId, qrImage });
     } catch (err) {
-        res.status(500).json({ error: "Failed to send email", details: err.message });
+        res.status(500).json({ error: "QR Error" });
     }
 });
 
-// 4. Verification Logic
-app.post('/verify', (req, res) => {
-    const { userId, userOtp } = req.body;
-    const record = otpStore[userId];
-
-    if (record && record.otp === userOtp) {
-        delete otpStore[userId]; 
-        res.json({ success: true });
+// 3. Mobile Approval Logic
+app.get('/approve-session', (req, res) => {
+    const { id } = req.query;
+    if (activeSessions[id]) {
+        activeSessions[id].authorized = true;
+        // Success message for the Cadet/User on mobile
+        res.send(`
+            <body style="font-family:sans-serif; text-align:center; padding-top:50px; background:#FFF5F6;">
+                <h1 style="color:#FF4B5C;">✓ ACCESS GRANTED</h1>
+                <p>Terminal session authorized for ${activeSessions[id].username}.</p>
+                <p style="font-size:0.8rem; color:#888;">You may close this tab.</p>
+            </body>
+        `);
     } else {
-        res.status(400).json({ success: false, message: "Invalid Code" });
+        res.status(404).send("Invalid or expired session.");
+    }
+});
+
+// 4. PC Polling Endpoint
+app.get('/check-status', (req, res) => {
+    const { id } = req.query;
+    const session = activeSessions[id];
+    
+    if (session && session.authorized) {
+        res.json({ status: 'approved' });
+        delete activeSessions[id]; // Security: One-time use session
+    } else {
+        res.json({ status: 'pending' });
     }
 });
 

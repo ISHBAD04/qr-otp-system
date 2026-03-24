@@ -13,343 +13,135 @@
             --dark: #1A1A1A;
         }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             background-color: var(--bg-soft);
             color: var(--text-main);
             display: flex;
             justify-content: center;
             min-height: 100vh;
-            width: 100%;
-            overflow-x: hidden;
         }
 
-        #bubble-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        #login-overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-soft);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: env(safe-area-inset-top, 40px) 20px 20px;
-            overflow-y: auto;
-        }
-
-        .login-card {
+        /* Shared UI Components */
+        .card {
             background: var(--white);
-            width: 100%;
-            max-width: 380px;
+            width: 90%;
+            max-width: 400px;
             padding: 30px 20px;
             border-radius: 35px;
             box-shadow: 0 10px 30px rgba(255, 75, 92, 0.12);
             text-align: center;
-            margin-bottom: 20px;
+            align-self: center;
         }
 
         .logo-circle {
-            width: 75px;
-            height: 75px;
+            width: 70px; height: 70px;
             background: var(--accent);
             border-radius: 50%;
             margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold;
         }
 
         input {
-            width: 100%;
-            padding: 15px;
+            width: 100%; padding: 15px;
             border: 2px solid #FFE0E3;
-            border-radius: 15px;
-            margin: 8px 0;
-            font-size: 1rem;
-            text-align: center;
-            outline: none;
+            border-radius: 15px; margin: 8px 0;
+            text-align: center; outline: none;
         }
 
         button {
-            width: 100%;
-            padding: 18px;
+            width: 100%; padding: 18px;
             background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 10px;
+            color: white; border: none;
+            border-radius: 50px; font-weight: 700;
+            cursor: pointer; margin-top: 10px;
         }
 
-        button:active { transform: scale(0.97); }
-
-        /* --- DASHBOARD VIEW --- */
-        .dashboard-content {
-            display: none; 
-            width: 100%;
-            max-width: 480px;
-            padding: env(safe-area-inset-top, 40px) 20px 40px;
-        }
-
-        .dash-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .status-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .stat-box {
-            background: var(--white);
-            padding: 20px;
-            border-radius: 24px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.04);
-        }
-
-        .stat-label { font-size: 0.7rem; color: #999; text-transform: uppercase; font-weight: 600; }
-        .stat-value { font-size: 1.3rem; font-weight: 800; margin-top: 5px; }
-
-        .qr-card {
-            background: white;
-            padding: 22px;
-            border-radius: 28px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.04);
-        }
-
-        .log-entry {
-            font-size: 0.75rem;
-            padding: 12px 0;
-            border-bottom: 1px solid #F6F6F6;
-            display: flex;
-        }
-
-        .log-time { color: var(--accent); font-weight: bold; min-width: 45px; }
-        .log-text { color: #555; }
-
-        #military-time {
-            font-family: monospace;
-            background: #222;
-            color: #00FF00;
-            padding: 8px 16px;
-            border-radius: 10px;
-            margin-top: auto;
-            margin-bottom: 30px;
-        }
+        /* Section Visibility */
+        #pc-view, #mobile-view, #main-dash { display: none; }
     </style>
 </head>
 <body>
 
-    <canvas id="bubble-canvas"></canvas>
-
-    <div id="login-overlay">
+    <div id="pc-view" class="card">
         <div class="logo-circle">MONG</div>
-        <div class="login-card">
-            <div style="display: flex; gap: 8px; margin-bottom: 20px; background: #F0F0F0; padding: 5px; border-radius: 15px;">
-                <button id="tab-login" onclick="switchAuthMode('login')" style="padding: 10px; font-size: 0.7rem; background: var(--dark); border-radius: 12px; color: white; margin:0;">LOGIN</button>
-                <button id="tab-register" onclick="switchAuthMode('register')" style="padding: 10px; font-size: 0.7rem; background: transparent; color: #555; border-radius: 12px; margin:0;">REGISTER</button>
-            </div>
-
-            <h2 id="auth-title">Secure Access</h2>
-            <p id="auth-desc" style="font-size: 0.8rem; color: #888; margin-top: -10px;">Enter credentials to begin</p>
-
-            <div id="reg-controls" style="display: none;">
-                <input type="text" id="reg-username" placeholder="Username">
-                <input type="email" id="reg-email" placeholder="Email Address">
-                <input type="password" id="reg-password" placeholder="Password">
-                <button onclick="handleRegister()" style="background: var(--dark);">CREATE ACCOUNT</button>
-            </div>
-
-            <div id="login-controls">
-                <input type="text" id="login-username" placeholder="Username">
-                <input type="password" id="login-password" placeholder="Password">
-                
-                <div id="login-qr-container" style="display: none; margin: 15px 0;">
-                    <div id="login-qr-spot" style="min-height: 160px; display: flex; align-items: center; justify-content: center; border: 2px dashed #FFE0E3; border-radius: 20px;"></div>
-                    <p style="font-size: 0.7rem; color: var(--accent); margin-top: 10px;">Check email for verification QR</p>
-                    <input type="tel" id="otp-input" placeholder="Enter 6-digit OTP" maxlength="6">
-                </div>
-
-                <button id="login-btn" onclick="requestVerification()">LOGIN</button>
-                <button id="verify-btn" onclick="verifyAndEnter()" style="display: none;">VERIFY OTP</button>
-            </div>
+        <h2>Secure Access</h2>
+        <div id="login-form">
+            <input type="text" id="login-username" placeholder="Username">
+            <button onclick="requestHandshake()">INITIALIZE SESSION</button>
         </div>
-        <div id="military-time">0000:00H</div>
+        
+        <div id="qr-container" style="display: none; margin-top: 20px;">
+            <div id="qr-spot"></div>
+            <p style="font-size: 0.8rem; color: var(--accent);">Scan with phone to authorize</p>
+            <div style="margin-top: 10px; font-family: monospace; color: #888;">WAITING FOR HANDSHAKE...</div>
+        </div>
     </div>
 
-    <div class="dashboard-content" id="main-dash">
-        <div class="dash-header">
-            <div>
-                <h2 style="margin:0; color: var(--accent);">MONG TERMINAL</h2>
-                <p style="margin:0; font-size: 0.7rem; color: #888;">PQC-HYBRID ACTIVE</p>
-            </div>
-            <button onclick="location.reload()" style="width:auto; padding:8px 15px; font-size:0.7rem; background:#EEE; color:#333;">LOG OUT</button>
-        </div>
+    <div id="mobile-view" class="card">
+        <div class="logo-circle">AUTH</div>
+        <h2>Authorize Login?</h2>
+        <p style="color: #888;">Confirm to grant terminal access to this session.</p>
+        <button onclick="approveSession()" style="background: var(--dark);">APPROVE ACCESS</button>
+    </div>
 
-        <div class="status-grid">
-            <div class="stat-box"><span class="stat-label">Network</span><div class="stat-value">24%</div></div>
-            <div class="stat-box"><span class="stat-label">Threats</span><div class="stat-value" style="color: var(--accent);">02</div></div>
-        </div>
-
-        <div class="qr-card">
-            <h3 style="font-size: 0.9rem;">SEC-OPS ACTIVITY LOG</h3>
-            <div id="log-container">
-                <div class="log-entry"><span class="log-time">0845</span><span class="log-text">Session established</span></div>
-                <div class="log-entry"><span class="log-time">0730</span><span class="log-text">Quantum-Safe Verified</span></div>
-            </div>
-            <button style="background: #6C5CE7; margin-top: 15px;" onclick="startBubbles()">ACTIVATE BUBBLE UI</button>
-        </div>
+    <div id="main-dash" style="padding: 40px; text-align: center;">
+        <h1 style="color: var(--accent);">TERMINAL ACTIVE</h1>
+        <p>PQC-Hybrid Handshake Verified.</p>
+        <button onclick="location.href='/'" style="width: auto; padding: 10px 20px;">LOGOUT</button>
     </div>
 
     <script>
-        const API_BASE = "https://qr-otp-system-g32y.vercel.app";
-        
-        function switchAuthMode(mode) {
-            const isReg = mode === 'register';
-            document.getElementById('reg-controls').style.display = isReg ? 'block' : 'none';
-            document.getElementById('login-controls').style.display = isReg ? 'none' : 'block';
-            document.getElementById('auth-title').innerText = isReg ? 'Register User' : 'Secure Access';
-            
-            // Reset login view state
-            document.getElementById('login-qr-container').style.display = 'none';
-            document.getElementById('login-btn').style.display = 'block';
-            document.getElementById('verify-btn').style.display = 'none';
+        const API_BASE = window.location.origin;
+        const params = new URLSearchParams(window.location.search);
+        const sessionId = params.get('id');
 
-            const loginBtn = document.getElementById('tab-login');
-            const regBtn = document.getElementById('tab-register');
-            loginBtn.style.background = isReg ? 'transparent' : 'var(--dark)';
-            loginBtn.style.color = isReg ? '#555' : 'white';
-            regBtn.style.background = isReg ? 'var(--dark)' : 'transparent';
-            regBtn.style.color = isReg ? 'white' : '#555';
-        }
-
-        async function handleRegister() {
-            const username = document.getElementById('reg-username').value;
-            const email = document.getElementById('reg-email').value;
-            const password = document.getElementById('reg-password').value;
-
-            if (!username || !email || !password) return alert("Fill all fields");
-
-            const res = await fetch(`${API_BASE}/generate`, { 
-                method: 'POST', 
-                headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify({ userId: username, email: email }) 
-            });
-            
-            const data = await res.json();
-            if (data.success) {
-                alert("Registration successful! Check your email for your Access QR Code.");
-                switchAuthMode('login');
-            }
-        }
-
-        async function requestVerification() {
-            const user = document.getElementById('login-username').value;
-            const pass = document.getElementById('login-password').value;
-            if (!user || !pass) return alert("Enter credentials");
-
-            // Show the OTP input field
-            document.getElementById('login-qr-container').style.display = 'block';
-            document.getElementById('login-qr-spot').style.display = 'none'; // QR is in email, so hide this box
-            document.getElementById('login-btn').style.display = 'none';
-            document.getElementById('verify-btn').style.display = 'block';
-
-            alert("Check your email. Scan the QR code with your phone to get your 6-digit code.");
-        }
-
-        async function verifyAndEnter() {
-            const user = document.getElementById('login-username').value;
-            const otp = document.getElementById('otp-input').value;
-
-            const res = await fetch(`${API_BASE}/verify`, { 
-                method: 'POST', 
-                headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify({ userId: user, userOtp: otp })
-            });
-
-            const data = await res.json();
-            if (data.success) {
-                document.getElementById('login-overlay').style.display = 'none';
-                document.getElementById('main-dash').style.display = 'block';
+        // ROUTING LOGIC: Determine which view to show
+        window.onload = () => {
+            if (sessionId) {
+                document.getElementById('mobile-view').style.display = 'block';
             } else {
-                alert("Invalid Access Code. Please check your phone.");
+                document.getElementById('pc-view').style.display = 'block';
+            }
+        };
+
+        // --- PC FUNCTIONS ---
+        async function requestHandshake() {
+            const user = document.getElementById('login-username').value;
+            if (!user) return alert("Enter Username");
+
+            const res = await fetch(`${API_BASE}/request-session`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username: user })
+            });
+            const data = await res.json();
+
+            if (data.qrImage) {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('qr-container').style.display = 'block';
+                document.getElementById('qr-spot').innerHTML = `<img src="${data.qrImage}" width="180">`;
+
+                // Poll for approval
+                const poll = setInterval(async () => {
+                    const statusRes = await fetch(`${API_BASE}/check-status?id=${data.sessionId}`);
+                    const status = await statusRes.json();
+                    if (status.status === 'approved') {
+                        clearInterval(poll);
+                        document.getElementById('pc-view').style.display = 'none';
+                        document.getElementById('main-dash').style.display = 'block';
+                    }
+                }, 2000);
             }
         }
 
-        // --- BUBBLE & CLOCK ENGINE ---
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('military-time').innerText = `${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}H`;
-        }
-        setInterval(updateClock, 1000);
-
-        const canvas = document.getElementById('bubble-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize);
-        resize();
-
-        class Bubble {
-            constructor() { this.reset(); }
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = canvas.height + 100;
-                this.radius = Math.random() * 15 + 5;
-                this.speed = Math.random() * 3 + 2;
-                this.opacity = Math.random() * 0.5 + 0.1;
-                this.wobbleInc = 0;
-            }
-            update() {
-                this.y -= this.speed;
-                this.x += Math.sin(this.wobbleInc) * 2;
-                this.wobbleInc += 0.05;
-                if (this.y < -50) this.reset();
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 75, 92, ${this.opacity})`;
-                ctx.fill();
-            }
-        }
-
-        function startBubbles() {
-            if(particles.length > 0) return;
-            for(let i = 0; i < 40; i++) particles.push(new Bubble());
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => { p.update(); p.draw(); });
-                requestAnimationFrame(animate);
-            }
-            animate();
+        // --- MOBILE FUNCTIONS ---
+        async function approveSession() {
+            window.location.href = `${API_BASE}/approve-session?id=${sessionId}`;
         }
     </script>
 </body>
