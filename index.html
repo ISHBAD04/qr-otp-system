@@ -37,13 +37,14 @@
             align-self: center;
         }
 
-        .logo-circle {
-            width: 70px; height: 70px;
-            background: var(--accent);
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: bold;
+        /* NEW LOGO STYLING */
+        .auth-logo {
+            display: block;
+            width: 100%;
+            max-width: 150px; 
+            height: auto;
+            margin: 0 auto 15px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
         }
 
         input {
@@ -68,7 +69,7 @@
 <body>
 
     <div id="pc-view" class="card">
-        <div class="logo-circle">MONG</div>
+        <img src="koko.png" alt="CEMA Logo" class="auth-logo">
         <h2>Secure Access</h2>
         <div id="login-form">
             <input type="text" id="login-username" placeholder="Username">
@@ -83,16 +84,17 @@
     </div>
 
     <div id="mobile-view" class="card">
-        <div class="logo-circle">AUTH</div>
+        <img src="koko.png" alt="CEMA Logo" class="auth-logo">
         <h2>Authorize Login?</h2>
         <p style="color: #888;">Confirm to grant terminal access to this session.</p>
         <button onclick="approveSession()" style="background: var(--dark);">APPROVE ACCESS</button>
     </div>
 
-    <div id="main-dash" style="padding: 40px; text-align: center;">
+    <div id="main-dash" style="padding: 40px; text-align: center; align-self: center;">
+        <img src="koko.png" alt="CEMA Logo" style="width: 100px; margin-bottom: 20px;">
         <h1 style="color: var(--accent);">TERMINAL ACTIVE</h1>
         <p>PQC-Hybrid Handshake Verified.</p>
-        <button onclick="location.href='/'" style="width: auto; padding: 10px 20px;">LOGOUT</button>
+        <button onclick="location.href='/'" style="width: auto; padding: 10px 40px;">LOGOUT</button>
     </div>
 
     <script>
