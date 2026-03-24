@@ -260,11 +260,12 @@
             const res = await fetch(`${API_BASE}/generate`, { 
                 method: 'POST', 
                 headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify({ userId: username, email: email, password: password })
+                body: JSON.stringify({ userId: username, email: email }) 
             });
+            
             const data = await res.json();
-            if (data.qrCode) {
-                alert("Registration successful! Verify via the QR sent to your email.");
+            if (data.success) {
+                alert("Registration successful! Check your email for your Access QR Code.");
                 switchAuthMode('login');
             }
         }
@@ -274,35 +275,32 @@
             const pass = document.getElementById('login-password').value;
             if (!user || !pass) return alert("Enter credentials");
 
-            // Show QR section and switch buttons
+            // Show the OTP input field
             document.getElementById('login-qr-container').style.display = 'block';
+            document.getElementById('login-qr-spot').style.display = 'none'; // QR is in email, so hide this box
             document.getElementById('login-btn').style.display = 'none';
             document.getElementById('verify-btn').style.display = 'block';
 
-            const res = await fetch(`${API_BASE}/generate`, { 
-                method: 'POST', 
-                headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify({userId: user})
-            });
-            const data = await res.json();
-            if(data.qrCode) {
-                document.getElementById('login-qr-spot').innerHTML = `<img src="${data.qrCode}" width="140" style="border-radius:10px;">`;
-            }
+            alert("Check your email. Scan the QR code with your phone to get your 6-digit code.");
         }
 
         async function verifyAndEnter() {
-            const otp = document.getElementById('otp-input').value;
             const user = document.getElementById('login-username').value;
+            const otp = document.getElementById('otp-input').value;
+
             const res = await fetch(`${API_BASE}/verify`, { 
                 method: 'POST', 
                 headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify({userId: user, userOtp: otp})
+                body: JSON.stringify({ userId: user, userOtp: otp })
             });
+
             const data = await res.json();
             if (data.success) {
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('main-dash').style.display = 'block';
-            } else alert("Invalid OTP");
+            } else {
+                alert("Invalid Access Code. Please check your phone.");
+            }
         }
 
         // --- BUBBLE & CLOCK ENGINE ---
