@@ -12,6 +12,12 @@ app.use(express.static(path.join(__dirname)));
 
 const otpStore = {};
 
+// FIX: This tells Vercel to show your index.html when you visit the site
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Generate QR and Send Email
 app.post('/generate', async (req, res) => {
     const { userId, email } = req.body;
     const id = userId || 'Admin_User';
@@ -22,21 +28,20 @@ app.post('/generate', async (req, res) => {
         const autoFillUrl = `https://qr-otp-system-g32y.vercel.app/verify-page?otp=${otp}`;
         const qrImage = await QRCode.toDataURL(autoFillUrl);
 
-        // Only try to send email if an email address was provided
         if (email) {
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: 'ishbadhaikal@gmail.com', 
-                    pass: 'dxpcknjyhqpdfaze' 
+                    user: 'ishbadhaikal@gmail.com', // Replace with your real email
+                    pass: 'dxpcknjyhqpdfaze'     // Replace with your App Password
                 }
             });
 
             await transporter.sendMail({
-                from: '"MONG Secure Access" <YOUR_ACTUAL_GMAIL@gmail.com>',
+                from: '"MONG Secure Access" <ishbadhaikal@gmail.com>',
                 to: email,
                 subject: 'Your Access QR Code',
-                text: `Hello ${id}, your OTP is ${otp}. Scan the attached QR to verify.`,
+                text: `Hello ${id}, scan the attached QR code to receive your OTP.`,
                 attachments: [{
                     filename: 'access-qr.png',
                     content: qrImage.split("base64,")[1],
@@ -47,13 +52,12 @@ app.post('/generate', async (req, res) => {
 
         res.json({ otp, qrCode: qrImage, success: true });
     } catch (err) {
-        console.error("Server Error:", err);
-        // We return a 500 JSON error instead of letting the function crash
-        res.status(500).json({ error: "Internal Server Error", details: err.message });
+        console.error("System Error:", err);
+        res.status(500).json({ error: "Operation failed", details: err.message });
     }
 });
 
-// Verification route
+// Verify OTP
 app.post('/verify', (req, res) => {
     const { userId, userOtp } = req.body;
     const id = userId || 'Admin_User';
