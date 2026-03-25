@@ -5,8 +5,9 @@ const app = express();
 
 app.use(express.json());
 
-// Baris kritikal untuk Vercel serve koko.png
-app.use(express.static(path.join(__dirname)));
+// Baris ni akan automatik serve apa-apa fail dalam folder public
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname));
 
 const activeSessions = {};
 
