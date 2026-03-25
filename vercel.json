@@ -12,10 +12,4 @@
       "dest": "server.js"
     }
   ]
-  {
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
-  ]
-}
 }

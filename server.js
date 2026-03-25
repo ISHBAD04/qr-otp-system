@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 // PENTING: Baris ni pastikan koko.png boleh dibaca oleh browser
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(__dirname));
 
 const activeSessions = {};
 
