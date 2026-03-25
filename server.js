@@ -5,9 +5,8 @@ const app = express();
 
 app.use(express.json());
 
-// Gantikan baris 11 sedia ada dengan ini:
+// Baris kritikal untuk Vercel serve koko.png
 app.use(express.static(path.join(__dirname)));
-app.use('/koko.png', express.static(path.join(__dirname, 'koko.png')));
 
 const activeSessions = {};
 
@@ -20,7 +19,7 @@ app.post('/request-session', async (req, res) => {
     const sessionId = Math.random().toString(36).substring(2, 10);
     activeSessions[sessionId] = { username, authorized: false };
 
-    // Gunakan domain Vercel kau yang terkini
+    // Gunakan domain Vercel kau
     const authUrl = `https://qr-otp-system-g32y.vercel.app/?id=${sessionId}`;
     
     try {
@@ -38,7 +37,7 @@ app.get('/approve-session', (req, res) => {
         res.send(`
             <body style="font-family:sans-serif; text-align:center; padding-top:50px; background:#FFF5F6;">
                 <h1 style="color:#FF4B5C;">✓ PENGESAHAN BERJAYA</h1>
-                <p>Akses terminal telah dibenarkan. Anda boleh tutup tab ini.</p>
+                <p>Terminal authorized. Anda boleh tutup tab ini.</p>
             </body>
         `);
     } else {
