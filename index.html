@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MONG QR LOGIN TESTING WEB</title>
+    <title>CEMA QR LOGIN SYSTEM</title>
     <style>
         :root {
             --accent: #FF4B5C; 
@@ -50,6 +50,7 @@
             border: 2px solid #FFE0E3;
             border-radius: 15px; margin: 8px 0;
             text-align: center; outline: none;
+            font-size: 16px;
         }
 
         button {
@@ -58,9 +59,21 @@
             color: white; border: none;
             border-radius: 50px; font-weight: 700;
             cursor: pointer; margin-top: 10px;
+            transition: 0.3s;
         }
 
-        #pc-view, #mobile-view, #main-dash { display: none; }
+        button:active { transform: scale(0.98); }
+
+        #pc-view, #mobile-view { display: none; }
+        
+        .loading-text {
+            margin-top: 10px; 
+            font-family: monospace; 
+            color: #888;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0.5; } }
     </style>
 </head>
 <body>
@@ -69,76 +82,20 @@
         <img src="koko.png" alt="CEMA Logo" class="auth-logo">
         <h2>SECURE ACCESS</h2>
         <div id="login-form">
-            <input type="text" id="login-username" placeholder="Username">
-            <button onclick="requestHandshake()">INITIALIZE SESSION</button>
+            <input type="text" id="login-username" placeholder="Masukkan Nama Pegawai">
+            <button id="init-btn" onclick="requestHandshake()">INITIALIZE SESSION</button>
         </div>
         
         <div id="qr-container" style="display: none; margin-top: 20px;">
             <div id="qr-spot"></div>
-            <p style="font-size: 0.8rem; color: var(--accent);">Scan with phone to authorize</p>
-            <div style="margin-top: 10px; font-family: monospace; color: #888;">WAITING...</div>
+            <p style="font-size: 0.9rem; color: var(--accent); font-weight: bold;">Scan dengan telefon untuk pengesahan</p>
+            <div class="loading-text">MENUNGGU PENGESAHAN...</div>
         </div>
     </div>
 
     <div id="mobile-view" class="card">
         <img src="koko.png" alt="CEMA Logo" class="auth-logo">
         <h2>Authorize Login?</h2>
-        <p style="color: #888;">Confirm to grant terminal access to this session.</p>
-        <button onclick="approveSession()" style="background: var(--dark);">APPROVE ACCESS</button>
-    </div>
-
-    <div id="main-dash" style="padding: 40px; text-align: center;">
-        <img src="koko.png" alt="CEMA Logo" style="width: 300px; margin-bottom: 20px;">
-        <h1 style="color: var(--accent);">TERMINAL ACTIVE</h1>
-        <p>PQC-Hybrid Handshake Verified.</p>
-        <button onclick="location.href='/'" style="width: auto; padding: 10px 20px;">LOGOUT</button>
-    </div>
-
-    <script>
-        const API_BASE = window.location.origin;
-        const params = new URLSearchParams(window.location.search);
-        const sessionId = params.get('id');
-
-        window.onload = () => {
-            if (sessionId) {
-                document.getElementById('mobile-view').style.display = 'block';
-            } else {
-                document.getElementById('pc-view').style.display = 'block';
-            }
-        };
-
-        async function requestHandshake() {
-            const user = document.getElementById('login-username').value;
-            if (!user) return alert("Enter Username");
-
-            const res = await fetch(`${API_BASE}/request-session`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ username: user })
-            });
-            const data = await res.json();
-
-            if (data.qrImage) {
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('qr-container').style.display = 'block';
-                document.getElementById('qr-spot').innerHTML = `<img src="${data.qrImage}" width="180">`;
-
-                const poll = setInterval(async () => {
-                    const statusRes = await fetch(`${API_BASE}/check-status?id=${data.sessionId}`);
-                    const status = await statusRes.json();
-                    
-                    if (status.status === 'approved') {
-                        clearInterval(poll);
-                        // Tukar bahagian ni supaya dia pergi ke page baru
-                        window.location.href = '/dashboard'; 
-                    }
-                }, 2000);     
-            }
-        }
-
-        async function approveSession() {
-            window.location.href = `${API_BASE}/approve-session?id=${sessionId}`;
-        }
-    </script>
-</body>
-</html>
+        <p style="color: #888;">Sahkan untuk membenarkan akses terminal kepada sesi ini.</p>
+        <button id="approve-btn" onclick="approveSession()" style="background: var(--dark);">APPROVE ACCESS</button>
+        <p id="status-msg" style="display:none; margin-top:15px; font-weight:bold
