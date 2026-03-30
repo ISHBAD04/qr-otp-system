@@ -1,0 +1,48 @@
+<div id="main-dash" class="card" style="max-width: 600px;">
+        <img src="koko.png" alt="CEMA Logo" style="width: 80px; margin-bottom: 10px;">
+        <h2 style="color: var(--accent); margin-bottom: 5px;">MONG OPERATIONAL TERMINAL</h2>
+        <p style="font-size: 0.8rem; color: #666; margin-bottom: 25px;">Handshake Verified. Welcome, Cadet Officer.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">
+            <button class="dash-btn" onclick="alert('Accessing Cyber Intel...')">
+                <span style="display:block; font-size: 1.5rem;">🛡️</span>
+                CYBER INTEL
+            </button>
+            <button class="dash-btn" onclick="alert('Scanning Network...')">
+                <span style="display:block; font-size: 1.5rem;">📡</span>
+                SPECTRUM OPS
+            </button>
+            <button class="dash-btn" onclick="alert('Opening System Logs...')">
+                <span style="display:block; font-size: 1.5rem;">📋</span>
+                AUDIT LOGS
+            </button>
+            <button class="dash-btn" onclick="alert('Initializing Security Protocol...')">
+                <span style="display:block; font-size: 1.5rem;">🔒</span>
+                PQC CONFIG
+            </button>
+        </div>
+
+        <button onclick="location.href='/'" style="background: var(--dark); width: auto; padding: 12px 40px; border-radius: 15px;">
+            SECURE LOGOUT
+        </button>
+    </div>
+
+    <style>
+        .dash-btn {
+            background: #fff;
+            border: 2px solid #FFE0E3;
+            color: var(--text-main);
+            padding: 20px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            transition: 0.3s;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .dash-btn:hover {
+            background: var(--bg-soft);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+    </style>

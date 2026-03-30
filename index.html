@@ -126,12 +126,13 @@
                 const poll = setInterval(async () => {
                     const statusRes = await fetch(`${API_BASE}/check-status?id=${data.sessionId}`);
                     const status = await statusRes.json();
+                    
                     if (status.status === 'approved') {
                         clearInterval(poll);
-                        document.getElementById('pc-view').style.display = 'none';
-                        document.getElementById('main-dash').style.display = 'block';
+                        // Tukar bahagian ni supaya dia pergi ke page baru
+                        window.location.href = '/dashboard'; 
                     }
-                }, 2000);
+                }, 2000);     
             }
         }
 
