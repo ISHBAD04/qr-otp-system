@@ -98,4 +98,86 @@
         <h2>Authorize Login?</h2>
         <p style="color: #888;">Sahkan untuk membenarkan akses terminal kepada sesi ini.</p>
         <button id="approve-btn" onclick="approveSession()" style="background: var(--dark);">APPROVE ACCESS</button>
-        <p id="status-msg" style="display:none; margin-top:15px; font-weight:bold
+        <p id="status-msg" style="display:none; margin-top:15px; font-weight:bold; color: green;">BERJAYA! Sila lihat skrin terminal.</p>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const sessionId = params.get('id');
+
+        window.onload = () => {
+            if (sessionId) {
+                document.getElementById('mobile-view').style.display = 'block';
+            } else {
+                document.getElementById('pc-view').style.display = 'block';
+            }
+        };
+
+        async function requestHandshake() {
+            const userField = document.getElementById('login-username');
+            const btn = document.getElementById('init-btn');
+            const user = userField.value;
+
+            if (!user) return alert("Sila masukkan Username");
+
+            btn.disabled = true;
+            btn.innerText = "CONNECTING...";
+
+            try {
+                const res = await fetch('/request-session', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ username: user })
+                });
+
+                if (!res.ok) throw new Error('Server Error');
+
+                const data = await res.json();
+
+                if (data.qrImage) {
+                    document.getElementById('login-form').style.display = 'none';
+                    document.getElementById('qr-container').style.display = 'block';
+                    document.getElementById('qr-spot').innerHTML = `<img src="${data.qrImage}" style="width: 100%; max-width: 200px;">`;
+
+                    const poll = setInterval(async () => {
+                        try {
+                            const statusRes = await fetch(`/check-status?id=${data.sessionId}`);
+                            const statusData = await statusRes.json();
+                            
+                            if (statusData.status === 'approved') {
+                                clearInterval(poll);
+                                window.location.href = '/dashboard.html'; 
+                            }
+                        } catch (e) { console.error("Polling error"); }
+                    }, 2000);     
+                }
+            } catch (err) {
+                alert("Database or Connection Error! Sila check internet/hotspot.");
+                btn.disabled = false;
+                btn.innerText = "INITIALIZE SESSION";
+            }
+        }
+
+        async function approveSession() {
+            const btn = document.getElementById('approve-btn');
+            btn.disabled = true;
+            btn.innerText = "PROCESSING...";
+
+            try {
+                const res = await fetch(`/approve-session?id=${sessionId}`);
+                if (res.ok) {
+                    btn.style.display = 'none';
+                    document.getElementById('status-msg').style.display = 'block';
+                } else {
+                    alert("Gagal mengesahkan sesi.");
+                    btn.disabled = false;
+                    btn.innerText = "APPROVE ACCESS";
+                }
+            } catch (err) {
+                alert("Error: Sambungan terputus.");
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
