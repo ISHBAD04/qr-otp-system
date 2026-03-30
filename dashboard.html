@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CEMA Operational Terminal</title>
+    <title>MONG Operational Terminal</title>
     <style>
         :root {
             --accent: #FF4B5C; 
@@ -20,7 +20,6 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden;
         }
 
         .card {
@@ -31,32 +30,25 @@
             border-radius: 40px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.05);
             text-align: center;
-            transition: 0.5s;
         }
 
-        /* Loading Animation Style */
         .loader {
-            width: 48px;
-            height: 48px;
+            width: 48px; height: 48px;
             border: 5px solid var(--bg-soft);
             border-bottom-color: var(--accent);
             border-radius: 50%;
             display: inline-block;
-            box-sizing: border-box;
             animation: rotation 1s linear infinite;
             margin-bottom: 20px;
         }
 
-        @keyframes rotation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-top: 20px;
+            margin: 25px 0;
         }
 
         .dash-btn {
@@ -75,69 +67,77 @@
             background: #fff9f9;
         }
 
-        .hidden { display: none; }
-
-        #process-text {
-            font-family: monospace;
-            color: var(--accent);
-            font-weight: bold;
+        .logout-btn {
+            background: var(--dark);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
         }
+
+        .hidden { display: none; }
+        #process-text { font-family: monospace; color: var(--accent); }
     </style>
 </head>
 <body>
 
     <div id="main-menu" class="card">
-        <img src="koko.png" alt="CEMA" style="width: 120px; margin-bottom: 10px;">
-        <h2>CEMA TERMINAL</h2>
-        <p style="font-size: 0.8rem; color: #888;">Select Operation Module</p>
+        <img src="koko.png" alt="CEMA" style="width: 140px; margin-bottom: 10px;">
+        <h2>OPERATIONAL TERMINAL</h2>
+        <p style="font-size: 0.8rem; color: #888; margin-bottom: 20px;">Authenticated: Cadet Officer</p>
         
         <div class="grid">
-            <button class="dash-btn" onclick="startProcess('CYBER INTEL', 'ANALYZING THREAT VECTORS...')">🛡️<br>INTEL</button>
-            <button class="dash-btn" onclick="startProcess('SPECTRUM OPS', 'SCANNING NETWORK SPECTRUM...')">📡<br>SPECTRUM</button>
-            <button class="dash-btn" onclick="startProcess('AUDIT LOGS', 'FETCHING SYSTEM RECORDS...')">📋<br>LOGS</button>
-            <button class="dash-btn" onclick="startProcess('PQC CONFIG', 'INITIALIZING QUANTUM SHIELD...')">🔒<br>PQC</button>
+            <button class="dash-btn" onclick="startProcess('CYBER INTEL', 'ANALYZING THREATS...')">🛡️<br>INTEL</button>
+            <button class="dash-btn" onclick="startProcess('SPECTRUM OPS', 'SCANNING NETWORK...')">📡<br>SPECTRUM</button>
+            <button class="dash-btn" onclick="startProcess('AUDIT LOGS', 'FETCHING RECORDS...')">📋<br>LOGS</button>
+            <button class="dash-btn" onclick="startProcess('PQC CONFIG', 'ENCRYPTING DATA...')">🔒<br>PQC</button>
         </div>
-        <button onclick="location.href='/'" style="margin-top: 20px; border: none; background: none; color: #888; cursor: pointer;">Logout</button>
+
+        <button class="logout-btn" onclick="location.href='/'">SECURE LOGOUT</button>
     </div>
 
     <div id="loading-screen" class="card hidden">
         <span class="loader"></span>
         <h2 id="process-title">SYSTEM</h2>
         <p id="process-text">INITIALIZING...</p>
-        <div id="progress-bar" style="width: 100%; background: #eee; height: 5px; border-radius: 10px; margin-top: 10px;">
-            <div id="progress-fill" style="width: 0%; background: var(--accent); height: 100%; border-radius: 10px; transition: 0.1s;"></div>
+        <div style="width: 100%; background: #eee; height: 8px; border-radius: 10px; margin: 20px 0; overflow: hidden;">
+            <div id="progress-fill" style="width: 0%; background: var(--accent); height: 100%; transition: 0.2s;"></div>
         </div>
+        <button onclick="resetDashboard()" style="border: none; background: none; color: #888; cursor: pointer;">Cancel Process</button>
     </div>
 
     <script>
+        let processInterval;
+
         function startProcess(title, message) {
-            // Sembunyikan menu, tunjuk loading
             document.getElementById('main-menu').classList.add('hidden');
             document.getElementById('loading-screen').classList.remove('hidden');
-            
             document.getElementById('process-title').innerText = title;
             document.getElementById('process-text').innerText = message;
 
             let width = 0;
             const fill = document.getElementById('progress-fill');
             
-            // Animasi loading bar
-            const interval = setInterval(() => {
+            processInterval = setInterval(() => {
                 if (width >= 100) {
-                    clearInterval(interval);
+                    clearInterval(processInterval);
                     setTimeout(() => {
                         alert(title + " COMPLETED!");
                         resetDashboard();
                     }, 500);
                 } else {
-                    width += Math.random() * 10;
+                    width += Math.random() * 15;
                     if(width > 100) width = 100;
                     fill.style.width = width + '%';
                 }
-            }, 200);
+            }, 300);
         }
 
         function resetDashboard() {
+            clearInterval(processInterval);
             document.getElementById('progress-fill').style.width = '0%';
             document.getElementById('main-menu').classList.remove('hidden');
             document.getElementById('loading-screen').classList.add('hidden');
