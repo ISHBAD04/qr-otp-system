@@ -181,6 +181,45 @@
                 padding: 12px !important;
             }
         }
+
+        @media (max-width: 600px) {
+            /* 1. Laraskan Container Utama Roadmap */
+            .vault-box, .container {
+                width: 92% !important;
+                padding: 20px 10px !important;
+                height: auto !important; /* Wajib auto supaya skrin boleh scroll */
+            }
+
+            /* 2. Kemaskan Kad Level (L1, L2, L3) */
+            .level-card {
+                width: 100% !important;
+                height: auto !important; /* Bagi kad memanjang ikut teks, jangan bagi saiz tetap */
+                padding: 15px !important;
+                margin-bottom: 15px !important;
+                display: block !important; /* Pastikan dia susun satu-satu ke bawah */
+            }
+
+            /* 3. Baiki Teks Huraian yang Terpotong */
+            .level-card p, .level-card span {
+                font-size: 0.85rem !important;
+                line-height: 1.5 !important;
+                white-space: normal !important; /* Benarkan teks turun ke baris baru */
+                overflow: visible !important;
+            }
+
+            /* 4. Tajuk Level (L1, L2, L3) */
+            .level-card h2, .level-title {
+                font-size: 1.1rem !important;
+                margin-bottom: 8px !important;
+            }
+
+            /* 5. Progress Bar */
+            .progress-bar-container {
+                width: 100% !important;
+                margin: 20px 0 !important;
+            }
+        }
+
     </style>
 </head>
 <body>
