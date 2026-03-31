@@ -5,79 +5,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PQC VAULT - CONCLUSION</title>
     <style>
+        :root {
+            --bg-deep: #0F051D;
+            --neon-red: #FF4B5C;
+            --card-bg: #1A1229;
+        }
+
         body { 
-            background: #0F051D; 
-            color: #FF4B5C; 
+            background: var(--bg-deep); 
+            color: var(--neon-red); 
             font-family: 'Courier New', monospace; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
             margin: 0;
-            background-image: radial-gradient(circle at 50% 50%, rgba(255, 75, 92, 0.05) 0%, transparent 70%);
+            padding: 20px;
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 75, 92, 0.1) 0%, transparent 80%);
         }
 
         .vault-box { 
-            border: 3px solid #FF4B5C; 
-            padding: 60px; 
-            border-radius: 30px; 
+            background: var(--card-bg);
+            border: 3px solid var(--neon-red); 
+            padding: 60px 40px; 
+            border-radius: 40px; 
             text-align: center; 
-            width: 85%; 
-            max-width: 900px;
-            box-shadow: 0 0 40px rgba(255, 75, 92, 0.2), inset 0 0 20px rgba(255, 75, 92, 0.1); 
-            background: rgba(26, 18, 41, 0.8);
+            width: 95%; 
+            max-width: 1200px; /* Box paling besar */
+            box-shadow: 0 0 60px rgba(255, 75, 92, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         h1 { 
-            font-size: 3.5rem; 
-            margin-bottom: 40px; 
+            font-size: 4.5rem; /* Saiz Mega */
+            margin: 0 0 40px 0; 
             text-transform: uppercase;
-            letter-spacing: 5px;
-            text-shadow: 0 0 15px rgba(255, 75, 92, 0.6);
+            letter-spacing: 10px;
+            text-shadow: 0 0 25px rgba(255, 75, 92, 0.7);
         }
 
         p { 
-            font-size: 1.8rem; 
+            font-size: 2.5rem; /* Tulisan sangat besar */
             color: #FFFFFF; 
-            line-height: 1.8; 
+            line-height: 1.5; 
             margin: 20px 0;
+            max-width: 1000px;
         }
 
-        /* BUTTON SMART & TAKTIKAL */
+        .status-tag {
+            color: var(--neon-red); 
+            margin: 40px 0; 
+            font-weight: bold; 
+            font-size: 2rem;
+            letter-spacing: 5px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        /* BUTTON SMART - WAJIB ADA */
         .btn-exit {
-            margin-top: 50px;
-            padding: 20px 50px;
-            font-size: 1.5rem;
+            display: inline-block;
+            margin-top: 40px;
+            padding: 25px 80px;
+            font-size: 2rem;
             font-family: 'Courier New', monospace;
-            font-weight: bold;
-            color: #FF4B5C;
+            font-weight: 900;
+            color: var(--neon-red);
             background: transparent;
-            border: 2px solid #FF4B5C;
-            border-radius: 10px;
+            border: 4px solid var(--neon-red);
+            border-radius: 20px;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            position: relative;
+            letter-spacing: 5px;
             transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(255, 75, 92, 0.3);
-            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 75, 92, 0.4);
         }
 
         .btn-exit:hover {
-            background: #FF4B5C;
-            color: #0F051D;
-            box-shadow: 0 0 40px rgba(255, 75, 92, 0.8);
-            transform: translateY(-5px) scale(1.05);
+            background: var(--neon-red);
+            color: var(--bg-deep);
+            box-shadow: 0 0 80px rgba(255, 75, 92, 1);
+            transform: scale(1.1);
         }
-
-        .btn-exit:active {
-            transform: translateY(0) scale(0.98);
-        }
-
     </style>
 </head>
 <body>
     <div class="vault-box">
-        <h1>[ KESIMPULAN STRATEGIK ]</h1>
+        <h1>[ KESIMPULAN ]</h1>
         
-        <p>Program ini dirangka secara berperingkat dari asas hingga kepakaran tinggi bagi menjamin <strong>Kedaulatan Digital Negara</strong>
+        <p>Program ini dirangka bagi menjamin <strong>Kedaulatan Digital Negara</strong>.</p>
+        
+        <div class="status-tag">
+            > MISSION STATUS: READY <
+        </div>
+
+        <button class="btn-exit" onclick="window.location.href='dashboard.html'">
+            TERMINATE
+        </button>
+    </div>
+</body>
+</html>
