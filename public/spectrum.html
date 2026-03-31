@@ -16,7 +16,7 @@
         body {
             background-color: var(--bg-deep);
             color: var(--text-pure);
-            font-family: 'Courier New', Courier, monospace; /* Tukar ke monospace supaya konsisten */
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -26,20 +26,21 @@
         }
 
         .terminal-window {
-            width: 95%;
-            max-width: 1100px; /* Lebar Standard Dashboard */
+            width: 90%;
+            max-width: 1100px;
             background: var(--card-bg);
             border: 2px solid var(--neon-purple);
             border-radius: 25px;
             padding: 50px;
             box-shadow: 0 0 40px rgba(177, 107, 255, 0.2);
+            height: auto; /* Biar dia memanjang ikut isi */
         }
 
         h1 { 
             color: var(--neon-purple); 
             letter-spacing: 5px; 
             text-transform: uppercase; 
-            font-size: 3rem; /* Saiz Mega */
+            font-size: 3rem;
             margin-bottom: 10px;
             text-shadow: 0 0 15px rgba(177, 107, 255, 0.6);
         }
@@ -75,18 +76,17 @@
         .level-title { 
             color: var(--neon-cyan); 
             font-weight: bold; 
-            font-size: 1.8rem; /* Tajuk Level Besar */
+            font-size: 1.8rem;
             margin-bottom: 10px; 
             letter-spacing: 1px;
         }
 
         .level-desc {
-            font-size: 1.3rem; /* Penerangan Jelas */
+            font-size: 1.3rem;
             line-height: 1.5;
             color: #ddd;
         }
 
-        /* Progress Bar Lebih Tebal */
         .progress-track {
             width: 100%;
             background: rgba(255, 255, 255, 0.1);
@@ -111,27 +111,75 @@
             margin-top: 50px; 
             display: flex; 
             justify-content: space-between; 
+            gap: 15px;
         }
 
         .btn {
             background: transparent;
             border: 3px solid var(--neon-purple);
             color: var(--neon-purple);
-            padding: 15px 40px;
+            padding: 15px 30px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             transition: 0.3s;
             font-family: 'Courier New', monospace;
+            flex: 1; /* Butang sama lebar */
         }
 
         .btn:hover { 
             background: var(--neon-purple); 
             color: var(--bg-deep); 
             box-shadow: 0 0 30px var(--neon-purple); 
+        }
+
+        /* --- KEMASUKAN KOD RESPONSIF PHONE --- */
+        @media (max-width: 600px) {
+            .terminal-window {
+                padding: 30px 15px !important;
+                width: 92% !important;
+                margin: 20px 0;
+            }
+
+            h1 {
+                font-size: 1.8rem !important; /* Kecilkan tajuk ROADMAP */
+                letter-spacing: 2px;
+            }
+
+            .sub-text {
+                font-size: 1rem !important;
+            }
+
+            .roadmap-container {
+                grid-template-columns: 1fr !important; /* Tukar jadi 1 column */
+                gap: 20px;
+            }
+
+            .level-card {
+                padding: 15px !important;
+            }
+
+            .level-title {
+                font-size: 1.3rem !important;
+            }
+
+            .level-desc {
+                font-size: 1rem !important;
+            }
+
+            .nav-footer {
+                flex-direction: column; /* Butang susun bawah */
+                margin-top: 30px;
+            }
+
+            .btn {
+                width: 100% !important;
+                font-size: 1rem !important;
+                padding: 12px !important;
+            }
         }
     </style>
 </head>
@@ -169,3 +217,8 @@
     <div class="nav-footer">
         <button class="btn" onclick="window.location.href='intel.html'">< PREV NODE</button>
         <button class="btn" onclick="window.location.href='logs.html'">NEXT NODE ></button>
+    </div>
+</div>
+
+</body>
+</html>
