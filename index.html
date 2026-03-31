@@ -6,32 +6,43 @@
     <title>MONG QR LOGIN SYSTEM</title>
     <style>
         :root {
-            --accent: #FF4B5C; 
-            --bg-soft: #FFF5F6;
-            --text-main: #2D2D2D;
-            --white: #FFFFFF;
-            --dark: #1A1A1A;
+            /* Palet warna dari imej Technology Canva */
+            --bg-deep: #0F051D;          /* Ungu gelap angkasa */
+            --card-bg: #1A1229;          /* Warna kad lebih cerah sikit */
+            --neon-cyan: #00D2FF;        /* Warna biru terang neon */
+            --neon-purple: #B16BFF;      /* Warna ungu cerah */
+            --text-pure: #FFFFFF;        /* Putih bersih */
+            --text-muted: #A19BB7;       /* Kelabu ungu untuk teks kurang penting */
+            --grad-btn: linear-gradient(135deg, #5E5CE6 0%, #B16BFF 100%);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+        }
 
         body {
             font-family: 'Segoe UI', Roboto, sans-serif;
             margin: 0;
-            background-color: var(--bg-soft);
-            color: var(--text-main);
+            background-color: var(--bg-deep);
+            color: var(--text-pure);
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            /* Efek cahaya glow kat background */
+            background-image: radial-gradient(circle at 10% 20%, rgba(94, 92, 230, 0.15) 0%, transparent 50%),
+                            radial-gradient(circle at 90% 80%, rgba(177, 107, 255, 0.1) 0%, transparent 50%);
         }
 
         .card {
-            background: var(--white);
+            background: var(--card-bg);
             width: 90%;
             max-width: 400px;
-            padding: 30px 20px;
-            border-radius: 35px;
-            box-shadow: 0 10px 30px rgba(255, 75, 92, 0.12);
+            padding: 40px 25px;
+            border-radius: 28px;
+            /* Border halus supaya nampak premium */
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
             text-align: center;
             align-self: center;
         }
@@ -39,41 +50,85 @@
         .auth-logo {
             display: block;
             width: 100%;
-            max-width: 150px; 
+            max-width: 130px; 
             height: auto;
-            margin: 0 auto 15px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+            margin: 0 auto 20px;
+            /* Efek glow pada logo CEMA kau */
+            filter: drop-shadow(0 0 12px rgba(0, 210, 255, 0.4));
+        }
+
+        h2 {
+            color: var(--neon-cyan);
+            font-size: 1.6rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
         }
 
         input {
-            width: 100%; padding: 15px;
-            border: 2px solid #FFE0E3;
-            border-radius: 15px; margin: 8px 0;
-            text-align: center; outline: none;
+            width: 100%; 
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px; 
+            margin: 10px 0;
+            text-align: center; 
+            outline: none;
             font-size: 16px;
+            color: white;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        input:focus {
+            border-color: var(--neon-cyan);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
         }
 
         button {
-            width: 100%; padding: 18px;
-            background: var(--accent);
-            color: white; border: none;
-            border-radius: 50px; font-weight: 700;
-            cursor: pointer; margin-top: 10px;
+            width: 100%; 
+            padding: 18px;
+            background: var(--grad-btn);
+            color: white; 
+            border: none;
+            border-radius: 14px; 
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 1px;
+            cursor: pointer; 
+            margin-top: 15px;
             transition: 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 8px 20px rgba(94, 92, 230, 0.3);
         }
 
-        button:active { transform: scale(0.98); }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(177, 107, 255, 0.5);
+        }
 
-        #pc-view, #mobile-view { display: none; }
+        button:active { 
+            transform: scale(0.97); 
+        }
+
+        #pc-view, #mobile-view { 
+            display: none; 
+        }
         
         .loading-text {
-            margin-top: 10px; 
-            font-family: monospace; 
-            color: #888;
-            animation: blink 1s infinite;
+            margin-top: 15px; 
+            font-family: 'Courier New', monospace; 
+            color: var(--neon-cyan);
+            font-size: 12px;
+            letter-spacing: 2px;
+            animation: blink 1.2s infinite;
         }
 
-        @keyframes blink { 50% { opacity: 0.5; } }
+        @keyframes blink { 50% { opacity: 0.3; } }
+
+        /* Custom scrollbar kalau perlu */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-purple); border-radius: 10px; }
     </style>
 </head>
 <body>
