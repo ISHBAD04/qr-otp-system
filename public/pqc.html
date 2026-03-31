@@ -102,6 +102,34 @@
             box-shadow: 0 0 50px var(--neon-red);
             transform: scale(1.05);
         }
+
+        /* Kod khas untuk repair paparan phone */
+        @media (max-width: 600px) {
+            /* 1. Kecilkan Tajuk Gergasi */
+            h1, .vault-box h1 {
+                font-size: 1.8rem !important; 
+                letter-spacing: 2px !important;
+            }
+
+            /* 2. Bagi kotak ikut lebar phone */
+            .vault-box, .log-window, .container {
+                width: 92% !important;
+                padding: 20px !important;
+                margin: 10px auto !important;
+            }
+
+            /* 3. Elakkan teks melimpah keluar border */
+            p, span, .log-entry {
+                font-size: 1rem !important;
+                word-wrap: break-word !important;
+            }
+            
+            /* 4. Repair highlight "Kedaulatan" */
+            .highlight-text {
+                font-size: 1.5rem !important;
+            }
+        }
+
     </style>
 </head>
 <body>
