@@ -2,20 +2,121 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SYSTEM LOGS - CEMA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM LOGS - CERTIFICATIONS</title>
     <style>
-        body { background: #0F051D; color: #FFFFFF; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .box { border: 1px solid rgba(255,255,255,0.3); padding: 40px; border-radius: 15px; text-align: left; background: #111; max-width: 500px; }
-        button { background: white; color: black; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 20px; width: 100%; }
+        :root {
+            --bg-deep: #0F051D;
+            --card-bg: #111;
+            --neon-cyan: #00D2FF;
+            --text-pure: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-pure);
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .log-window {
+            width: 90%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 1);
+        }
+
+        .log-header {
+            color: var(--neon-cyan);
+            border-bottom: 1px dashed var(--neon-cyan);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .log-entry {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        .tag {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .tag-baseline { background: #4CAF50; color: white; }
+        .tag-intermediate { background: #2196F3; color: white; }
+        .tag-advance { background: #FF9800; color: white; }
+        .tag-expert { background: #F44336; color: white; }
+
+        .nav-footer {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+        }
+
+        .btn:hover { background: #fff; color: #000; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2 style="color: #00D2FF;">> ACCESS_LOGS.EXE</h2>
-        <p>[08:45:12] User ISBAD_04 Logged In</p>
-        <p>[08:45:45] QR Handshake: SUCCESSFUL</p>
-        <p>[08:46:01] Database Sync: COMPLETED</p>
-        <button onclick="window.location.href='dashboard.html'">TERMINATE VIEW</button>
+
+<div class="log-window">
+    <div class="log-header">
+        <span>> GLOBAL_STANDARD_REFERENCE.LOG</span>
+        <span>VERIFIED: CEMA_MINDEF</span>
     </div>
+
+    <div class="log-entry">
+        <span class="tag tag-baseline">BASELINE</span>
+        <span>CompTIA Security+, LKSEP (ATM), AWS/Azure Foundation</span>
+    </div>
+
+    <div class="log-entry">
+        <span class="tag tag-intermediate">INTERMEDIATE</span>
+        <span>ISACA (CRISC), NIST Framework, UPNM Forensics (TSS3323)</span>
+    </div>
+
+    <div class="log-entry">
+        <span class="tag tag-advance">ADVANCE</span>
+        <span>CompTIA CySA+, SANS (GCFE/FOR578), SOC Training</span>
+    </div>
+
+    <div class="log-entry">
+        <span class="tag tag-expert">EXPERT</span>
+        <span>ISC2 (CISSP), ISO/IEC 27001, UPNM (TST3273) Post-Quantum</span>
+    </div>
+
+    <div class="log-entry" style="margin-top: 20px; color: var(--neon-cyan);">
+        <span>KEY INSIGHT: Integrasi antara doktrin ATM, akademik UPNM, dan piawaian industri.</span>
+    </div>
+
+    <div class="nav-footer">
+        <button class="btn" onclick="window.location.href='spectrum.html'">< PREV_NODE</button>
+        <button class="btn" onclick="window.location.href='pqc.html'">NEXT_NODE: PQC_VAULT ></button>
+    </div>
+</div>
+
 </body>
 </html>
