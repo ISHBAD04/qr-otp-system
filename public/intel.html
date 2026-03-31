@@ -2,18 +2,128 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CYBER INTEL - CEMA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER INTEL - CEMA TERMINAL</title>
     <style>
-        body { background: #0F051D; color: #00D2FF; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .box { border: 2px solid #00D2FF; padding: 40px; border-radius: 20px; text-align: center; background: #1A1229; box-shadow: 0 0 20px rgba(0, 210, 255, 0.3); }
-        button { background: #00D2FF; color: #0F051D; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+        :root {
+            --bg-deep: #0F051D;
+            --card-bg: #1A1229;
+            --neon-cyan: #00D2FF;
+            --text-pure: #FFFFFF;
+            --text-dim: #A19BB7;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-pure);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .terminal-window {
+            width: 90%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border: 1px solid var(--neon-cyan);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+            position: relative;
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0, 210, 255, 0.3);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+        }
+
+        .content h1 {
+            color: var(--neon-cyan);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .typewriter p {
+            overflow: hidden;
+            border-right: .15em solid var(--neon-cyan);
+            white-space: nowrap;
+            margin: 10px 0;
+            letter-spacing: .10em;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--neon-cyan); } }
+
+        .objectives-list {
+            text-align: left;
+            margin-top: 30px;
+            color: var(--text-dim);
+        }
+
+        .nav-footer {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--neon-cyan);
+            color: var(--bg-deep);
+        }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1>[ CYBER INTEL NODE ]</h1>
-        <p>Status: All surveillance systems active.</p>
-        <button onclick="window.location.href='dashboard.html'">RETURN TO TERMINAL</button>
+
+<div class="terminal-window">
+    <div class="status-header">
+        <span>NODE: CYBER_INTEL_01</span>
+        <span>STATUS: ENCRYPTED_ACCESS</span>
     </div>
+
+    <div class="content">
+        <h1>[ PENGENALAN PELAN PEMBANGUNAN ]</h1>
+        
+        <div class="typewriter">
+            <p>> INITIALIZING SUBJECT: CYBERSECURITY EXPERTISE...</p>
+        </div>
+
+        <div class="objectives-list">
+            <p style="color: var(--neon-cyan);">>> OBJEKTIF UTAMA:</p>
+            <ul style="list-style: none; padding-left: 10px;">
+                <li>1. Menyediakan satu laluan kemahiran (Competency Path) yang komprehensif.</li>
+                <li>2. Memastikan penguasaan domain siber secara teknikal dan kritikal.</li>
+                <li>3. Memahami keperluan industri dan standard antarabangsa.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="nav-footer">
+        <button class="btn" onclick="window.location.href='dashboard.html'">< RETURN</button>
+        <button class="btn" onclick="window.location.href='spectrum.html'">NEXT NODE: SPECTRUM OPS ></button>
+    </div>
+</div>
+
 </body>
 </html>
