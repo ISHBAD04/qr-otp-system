@@ -16,51 +16,85 @@
         body {
             background-color: var(--bg-deep);
             color: var(--text-pure);
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Courier New', Courier, monospace; /* Tukar ke monospace supaya konsisten */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            background-image: radial-gradient(circle at 50% 50%, rgba(177, 107, 255, 0.05) 0%, transparent 80%);
         }
 
         .terminal-window {
-            width: 90%;
-            max-width: 850px;
+            width: 95%;
+            max-width: 1100px; /* Lebar Standard Dashboard */
             background: var(--card-bg);
-            border: 1px solid var(--neon-purple);
-            border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 0 30px rgba(177, 107, 255, 0.15);
+            border: 2px solid var(--neon-purple);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 0 40px rgba(177, 107, 255, 0.2);
         }
 
-        h1 { color: var(--neon-purple); letter-spacing: 2px; text-transform: uppercase; font-size: 1.4rem; }
+        h1 { 
+            color: var(--neon-purple); 
+            letter-spacing: 5px; 
+            text-transform: uppercase; 
+            font-size: 3rem; /* Saiz Mega */
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(177, 107, 255, 0.6);
+        }
+
+        .sub-text {
+            color: #888; 
+            font-size: 1.4rem; 
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
 
         .roadmap-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 25px;
+            gap: 30px;
+            margin-top: 40px;
             text-align: left;
         }
 
         .level-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 4px solid var(--neon-purple);
-            padding: 15px;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 6px solid var(--neon-purple);
+            padding: 25px;
+            border-radius: 12px;
+            transition: 0.3s;
         }
 
-        .level-title { color: var(--neon-cyan); font-weight: bold; margin-bottom: 5px; }
+        .level-card:hover {
+            background: rgba(177, 107, 255, 0.1);
+            transform: translateX(10px);
+        }
 
-        /* Progress Bar Animasi */
+        .level-title { 
+            color: var(--neon-cyan); 
+            font-weight: bold; 
+            font-size: 1.8rem; /* Tajuk Level Besar */
+            margin-bottom: 10px; 
+            letter-spacing: 1px;
+        }
+
+        .level-desc {
+            font-size: 1.3rem; /* Penerangan Jelas */
+            line-height: 1.5;
+            color: #ddd;
+        }
+
+        /* Progress Bar Lebih Tebal */
         .progress-track {
             width: 100%;
             background: rgba(255, 255, 255, 0.1);
-            height: 10px;
+            height: 20px;
             border-radius: 10px;
-            margin: 20px 0;
+            margin: 40px 0;
             overflow: hidden;
+            border: 1px solid rgba(177, 107, 255, 0.3);
         }
 
         .progress-fill {
@@ -68,30 +102,45 @@
             background: linear-gradient(90deg, var(--neon-purple), var(--neon-cyan));
             width: 0%;
             animation: grow 4s forwards cubic-bezier(0.1, 0.4, 0.4, 1);
+            box-shadow: 0 0 20px var(--neon-purple);
         }
 
         @keyframes grow { to { width: 100%; } }
 
-        .nav-footer { margin-top: 35px; display: flex; justify-content: space-between; }
+        .nav-footer { 
+            margin-top: 50px; 
+            display: flex; 
+            justify-content: space-between; 
+        }
+
         .btn {
             background: transparent;
-            border: 1px solid var(--neon-purple);
+            border: 3px solid var(--neon-purple);
             color: var(--neon-purple);
-            padding: 10px 25px;
-            border-radius: 50px;
+            padding: 15px 40px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             transition: 0.3s;
+            font-family: 'Courier New', monospace;
         }
-        .btn:hover { background: var(--neon-purple); color: white; box-shadow: 0 0 15px var(--neon-purple); }
+
+        .btn:hover { 
+            background: var(--neon-purple); 
+            color: var(--bg-deep); 
+            box-shadow: 0 0 30px var(--neon-purple); 
+        }
     </style>
 </head>
 <body>
 
 <div class="terminal-window">
     <div style="text-align: center;">
-        <h1>[ CYBER EXPERTISE ROADMAP ]</h1>
-        <p style="color: #888; font-size: 0.9rem;">Analysing Career Trajectory...</p>
+        <h1>[ ROADMAP KERJAYA ]</h1>
+        <p class="sub-text">> Analysing Cyber Trajectory...</p>
     </div>
 
     <div class="progress-track">
@@ -101,27 +150,22 @@
     <div class="roadmap-container">
         <div class="level-card">
             <div class="level-title">L1: CYBER READY</div>
-            <p style="font-size: 0.85rem; margin: 0;">Asas & Kesedaran: Literasi Digital & Ancaman.</p>
+            <p class="level-desc">Asas & Kesedaran: Literasi Digital & Pengenalan Ancaman Siber.</p>
         </div>
         <div class="level-card">
             <div class="level-title">L2: CYBER LITERATE</div>
-            <p style="font-size: 0.85rem; margin: 0;">Teknikal: Pengukuhan Sistem & Rangkaian.</p>
+            <p class="level-desc">Teknikal: Pengukuhan Sistem, Rangkaian & Praktikal Analyst.</p>
         </div>
         <div class="level-card">
             <div class="level-title">L3: CYBER COMPETENT</div>
-            <p style="font-size: 0.85rem; margin: 0;">Analisis: Forensic & Incident Response.</p>
+            <p class="level-desc">Analisis: Digital Forensics, Incident Response & Kepimpinan.</p>
         </div>
         <div class="level-card">
             <div class="level-title">L4: CYBER EXPERT</div>
-            <p style="font-size: 0.85rem; margin: 0;">Pakar: Strategi & Kedaulatan Digital (15-18 Bulan).</p>
+            <p class="level-desc">Pakar: Strategi, Penggubalan Dasar & Kedaulatan Digital.</p>
         </div>
     </div>
 
     <div class="nav-footer">
-        <button class="btn" onclick="window.location.href='intel.html'">< PREVIOUS NODE</button>
-        <button class="btn" onclick="window.location.href='logs.html'">NEXT NODE: SYSTEM LOGS ></button>
-    </div>
-</div>
-
-</body>
-</html>
+        <button class="btn" onclick="window.location.href='intel.html'">< PREV NODE</button>
+        <button class="btn" onclick="window.location.href='logs.html'">NEXT NODE ></button>
