@@ -2,18 +2,126 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SPECTRUM OPS - CEMA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPECTRUM OPS - ROADMAP</title>
     <style>
-        body { background: #0F051D; color: #B16BFF; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .box { border: 2px solid #B16BFF; padding: 40px; border-radius: 24px; text-align: center; background: #1A1229; box-shadow: 0 0 20px rgba(177, 107, 255, 0.2); }
-        button { background: #B16BFF; color: white; border: none; padding: 12px 25px; border-radius: 12px; cursor: pointer; font-weight: bold; margin-top: 25px; text-transform: uppercase; }
+        :root {
+            --bg-deep: #0F051D;
+            --card-bg: #1A1229;
+            --neon-purple: #B16BFF;
+            --neon-cyan: #00D2FF;
+            --text-pure: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-pure);
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .terminal-window {
+            width: 90%;
+            max-width: 850px;
+            background: var(--card-bg);
+            border: 1px solid var(--neon-purple);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 0 30px rgba(177, 107, 255, 0.15);
+        }
+
+        h1 { color: var(--neon-purple); letter-spacing: 2px; text-transform: uppercase; font-size: 1.4rem; }
+
+        .roadmap-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .level-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid var(--neon-purple);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .level-title { color: var(--neon-cyan); font-weight: bold; margin-bottom: 5px; }
+
+        /* Progress Bar Animasi */
+        .progress-track {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            height: 10px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-cyan));
+            width: 0%;
+            animation: grow 4s forwards cubic-bezier(0.1, 0.4, 0.4, 1);
+        }
+
+        @keyframes grow { to { width: 100%; } }
+
+        .nav-footer { margin-top: 35px; display: flex; justify-content: space-between; }
+        .btn {
+            background: transparent;
+            border: 1px solid var(--neon-purple);
+            color: var(--neon-purple);
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn:hover { background: var(--neon-purple); color: white; box-shadow: 0 0 15px var(--neon-purple); }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1 style="letter-spacing: 3px;">[ SPECTRUM OPERATIONS ]</h1>
-        <p style="color: #A19BB7;">Scanning frequencies... Signal interference detected at 2.4GHz.</p>
-        <button onclick="window.location.href='dashboard.html'">BACK TO HUB</button>
+
+<div class="terminal-window">
+    <div style="text-align: center;">
+        <h1>[ CYBER EXPERTISE ROADMAP ]</h1>
+        <p style="color: #888; font-size: 0.9rem;">Analysing Career Trajectory...</p>
     </div>
+
+    <div class="progress-track">
+        <div class="progress-fill"></div>
+    </div>
+
+    <div class="roadmap-container">
+        <div class="level-card">
+            <div class="level-title">L1: CYBER READY</div>
+            <p style="font-size: 0.85rem; margin: 0;">Asas & Kesedaran: Literasi Digital & Ancaman.</p>
+        </div>
+        <div class="level-card">
+            <div class="level-title">L2: CYBER LITERATE</div>
+            <p style="font-size: 0.85rem; margin: 0;">Teknikal: Pengukuhan Sistem & Rangkaian.</p>
+        </div>
+        <div class="level-card">
+            <div class="level-title">L3: CYBER COMPETENT</div>
+            <p style="font-size: 0.85rem; margin: 0;">Analisis: Forensic & Incident Response.</p>
+        </div>
+        <div class="level-card">
+            <div class="level-title">L4: CYBER EXPERT</div>
+            <p style="font-size: 0.85rem; margin: 0;">Pakar: Strategi & Kedaulatan Digital (15-18 Bulan).</p>
+        </div>
+    </div>
+
+    <div class="nav-footer">
+        <button class="btn" onclick="window.location.href='intel.html'">< PREVIOUS NODE</button>
+        <button class="btn" onclick="window.location.href='logs.html'">NEXT NODE: SYSTEM LOGS ></button>
+    </div>
+</div>
+
 </body>
 </html>
