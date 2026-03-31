@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER TRAJECTORY - SLIDE</title>
+    <style>
+        :root {
+            --bg-deep: #0F051D;
+            --card-bg: #111;
+            --neon-cyan: #00D2FF;
+            --neon-purple: #B16BFF;
+            --text-pure: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-pure);
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 0;
+            background-image: radial-gradient(circle at 50% 50%, rgba(0, 210, 255, 0.05) 0%, transparent 80%);
+        }
+
+        .master-window {
+            width: 95%;
+            max-width: 1150px;
+            background: var(--card-bg);
+            border: 2px solid var(--neon-cyan);
+            padding: 60px;
+            border-radius: 25px;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 210, 255, 0.2), inset 0 0 20px rgba(0, 0, 0, 1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            height: 12px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+            box-shadow: 0 0 15px var(--neon-cyan);
+            transition: width 0.5s ease;
+        }
+
+        .header-status {
+            display: flex;
+            justify-content: space-between;
+            color: var(--neon-cyan);
+            font-weight: bold;
+            border-bottom: 2px dashed var(--neon-cyan);
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            font-size: 1.2rem;
+        }
+
+        .content-box { min-height: 400px; }
+
+        h1 {
+            color: var(--neon-purple);
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            margin-top: 0;
+            letter-spacing: 3px;
+        }
+
+        h3 { color: var(--neon-cyan); margin-top: 30px; font-size: 1.5rem; text-transform: uppercase; }
+
+        .slide-text { font-size: 1.5rem; line-height: 1.6; color: #ddd; }
+
+        ul { list-style: none; padding-left: 0; }
+        li { margin-bottom: 12px; padding-left: 30px; position: relative; }
+        li::before { content: ">"; position: absolute; left: 0; color: var(--neon-cyan); font-weight: bold; }
+
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 50px; gap: 20px; }
+
+        .btn {
+            background: transparent;
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn:hover { background: var(--neon-cyan); color: var(--bg-deep); box-shadow: 0 0 25px var(--neon-cyan); }
+        .btn-next { border-color: var(--neon-purple); color: var(--neon-purple); }
+        .btn-next:hover { background: var(--neon-purple); color: #fff; box-shadow: 0 0 25px var(--neon-purple); }
+
+        @media (max-width: 768px) {
+            .master-window { padding: 30px 20px; }
+            h1 { font-size: 1.6rem; }
+            .slide-text { font-size: 1.1rem; }
+            .nav-footer { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="master-window">
+    <div class="progress-bar">
+        <div class="progress-fill" style="width: 5.8%;"></div> 
+    </div>
+
+    <div class="header-status">
+        <span>> NODE: SLIDE_01</span>
+        <span>STATUS: ACTIVE</span>
+    </div>
+
+    <style>
+        /* Tema Hijau Taktikal untuk Level 2 */
+        :root {
+            --neon-green: #7FFF00;
+            --dark-olive: #1A2410;
+        }
+
+        .master-window {
+            border-color: var(--neon-green) !important;
+            box-shadow: 0 0 40px rgba(127, 255, 0, 0.2) !important;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 Column untuk nampak lebih sado */
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .info-box {
+            background: rgba(127, 255, 0, 0.05);
+            border: 1px solid var(--neon-green);
+            padding: 20px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .info-box:hover {
+            background: rgba(127, 255, 0, 0.1);
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        .box-title {
+            color: var(--neon-green);
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(127, 255, 0, 0.3);
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .box-list {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+            padding-left: 15px;
+        }
+
+        .header-status span { color: var(--neon-green) !important; }
+        .progress-fill { background: linear-gradient(90deg, #4CAF50, var(--neon-green)) !important; width: 41.1%; } /* Slide 7/17 */
+    </style>
+
+        <div class="content-box">
+            <h1 style="color: var(--neon-green);">Level 2: Cyber Capable</h1>
+            
+            <div class="dashboard-grid">
+                <div class="info-box">
+                    <span class="box-title">EXECUTOR: Technical Foundations II</span>
+                    <ul class="box-list">
+                        <li>Security Operations & Analysis</li>
+                        <li>Hacker Tools & Incident Handling</li>
+                        <li>Network/Endpoint Security</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <span class="box-title">LEADERSHIP: Cyber GRC & Management</span>
+                    <ul class="box-list">
+                        <li>Policy Development</li>
+                        <li>Cybersecurity Risk Assessment</li>
+                        <li>Security Strategic</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <span class="box-title">Forensics Basics</span>
+                    <ul class="box-list">
+                        <li>Digital Acquisition & Rapid Triage</li>
+                        <li>Windows/Mobile Forensic Analysis</li>
+                        <li>Imaging (FTK Imager)</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <span class="box-title">Incident Response (IR)</span>
+                    <ul class="box-list">
+                        <li>Post-Incident Review</li>
+                        <li>Incident Identification & Analysis</li>
+                        <li>Preparation & Planning</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <span class="box-title">Network Security & Monitoring</span>
+                    <ul class="box-list">
+                        <li>Network Security Fundamentals</li>
+                        <li>Network Traffic Analysis</li>
+                        <li>Intrusion Detection & Prevention</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <span class="box-title">Cyber Threat Intelligence (CTI)</span>
+                    <ul class="box-list">
+                        <li>Threat Intelligence Lifecycle</li>
+                        <li>Data Collection (OSINT)</li>
+                        <li>Threat Analysis & Risk Assessment</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    <div class="nav-footer">
+        <a href="slide6.html" class="btn">PREV_NODE</a>
+        <a href="slide8.html" class="btn btn-next">NEXT_NODE</a>
+    </div>
+</div>
+
+</body>
+</html>
