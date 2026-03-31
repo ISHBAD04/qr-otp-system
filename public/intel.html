@@ -115,6 +115,65 @@
             box-shadow: 0 0 40px var(--neon-cyan);
             transform: scale(1.05);
         }
+
+        /* --- KOD RESPONSIF UNTUK PHONE --- */
+        @media (max-width: 600px) {
+            body {
+                overflow-y: auto; /* Bagi boleh scroll kalau content panjang */
+                padding: 20px 0;
+            }
+
+            .terminal-window {
+                width: 90%;
+                padding: 25px; /* Kurangkan padding supaya ruang dalam lebih luas */
+                margin: 20px auto;
+                height: auto; /* Wajib auto supaya kotak memanjang ikut teks */
+            }
+
+            .status-header {
+                font-size: 0.8rem; /* Kecilkan status kat bucu atas */
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .content h1 {
+                font-size: 1.8rem; /* Kecilkan tajuk mega supaya tak pecah baris */
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            .typewriter p {
+                font-size: 1rem; /* Saiz typing yang sesuai untuk skrin sempit */
+                white-space: normal; /* Bagi dia turun baris kalau panjang sangat */
+                border-right: none;
+                animation: none; /* Matikan animasi typing kat phone untuk elak glitch layout */
+            }
+
+            .objectives-list p {
+                font-size: 1.3rem; /* Saiz sub-tajuk objektif */
+            }
+
+            .objectives-list ul li {
+                font-size: 1rem; /* Poin objektif lebih "readable" */
+                margin-bottom: 12px;
+                padding-left: 10px;
+                border-left: 2px solid var(--neon-cyan); /* Tambah sikit deco siber */
+            }
+
+            .nav-footer {
+                flex-direction: column; /* Susun butang atas bawah kat phone */
+                gap: 15px;
+                margin-top: 40px;
+            }
+
+            .btn {
+                width: 100%; /* Butang penuh lebar skrin phone */
+                padding: 15px;
+                font-size: 1.1rem;
+                text-align: center;
+            }
+        }
+
     </style>
 </head>
 <body>
