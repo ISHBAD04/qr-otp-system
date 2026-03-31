@@ -157,6 +157,47 @@
             }
         }
 
+        /* Kod khas untuk repair paparan Kesimpulan kat phone */
+        @media (max-width: 600px) {
+            /* 1. Repair Tajuk Gergasi */
+            h1 {
+                font-size: 1.8rem !important; /* Kecilkan sikit tajuk */
+                letter-spacing: 2px;
+                margin-bottom: 20px;
+            }
+
+            /* 2. Bagi kotak ikut lebar phone dan "Hapus Fixed Height" */
+            .vault-box, .container {
+                width: 92% !important; /* Lebarkan kotak */
+                max-width: 95%; 
+                padding: 15px !important; /* Kurangkan padding sikit supaya teks tak tercekik */
+                height: auto !important; /* Hapus `height` tetap, biar dia ikut panjang teks */
+                margin: 10px auto !important;
+                border-radius: 15px; /* Sesuaikan radius */
+            }
+
+            /* 3. Teks Huraian */
+            p {
+                font-size: 0.9rem !important; /* Kecilkan teks badan sikit */
+                line-height: 1.4 !important;
+                margin: 10px 0;
+                word-wrap: break-word; /* Elakkan teks berlanggar border */
+            }
+
+            /* 4. Teks Highlight "Kedaulatan" */
+            .highlight-text {
+                font-size: 1.2rem !important; /* Kecilkan highlight */
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+
+            /* 5. Repair Mission Status & Button */
+            .status-tag, .btn-exit {
+                font-size: 1rem !important; /* Kecilkan sikit teks status dan butang */
+                padding: 12px 30px !important;
+            }
+        }
+
     </style>
 </head>
 <body>
