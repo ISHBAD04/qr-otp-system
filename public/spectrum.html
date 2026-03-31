@@ -22,17 +22,17 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px 0;
+            padding: 40px 0;
             background-image: radial-gradient(circle at 50% 50%, rgba(177, 107, 255, 0.05) 0%, transparent 80%);
         }
 
         .terminal-window {
-            width: 90%;
-            max-width: 1000px;
+            width: 95%; /* Lebarkan sikit */
+            max-width: 1150px; /* Samakan dengan box Kesimpulan & Log */
             background: var(--card-bg);
             border: 2px solid var(--neon-purple);
             border-radius: 25px;
-            padding: 40px;
+            padding: 60px; /* Padding lebih luas untuk PC */
             box-shadow: 0 0 40px rgba(177, 107, 255, 0.2);
             height: auto; 
         }
@@ -41,24 +41,24 @@
             color: var(--neon-purple); 
             letter-spacing: 5px; 
             text-transform: uppercase; 
-            font-size: 2.5rem;
-            margin-bottom: 5px;
+            font-size: 3rem; /* Font tajuk lebih besar */
+            margin-bottom: 10px;
             text-shadow: 0 0 15px rgba(177, 107, 255, 0.6);
         }
 
         .sub-text {
             color: #888; 
-            font-size: 1.1rem; 
-            margin-bottom: 25px;
+            font-size: 1.3rem; 
+            margin-bottom: 35px;
             letter-spacing: 2px;
         }
 
         .progress-track {
             width: 100%;
             background: rgba(255, 255, 255, 0.1);
-            height: 12px;
+            height: 15px; /* Tebalkan sikit bar */
             border-radius: 10px;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             overflow: hidden;
             border: 1px solid rgba(177, 107, 255, 0.3);
         }
@@ -71,19 +71,19 @@
             box-shadow: 0 0 15px var(--neon-purple);
         }
 
-        @keyframes grow { to { width: 75%; } } /* Set ikut progress semasa */
+        @keyframes grow { to { width: 75%; } } 
 
         .roadmap-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Desktop: 2 baris, 2 column */
-            gap: 20px;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 30px; /* Jarak antara kad lebih besar */
             text-align: left;
         }
 
         .level-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 4px solid var(--neon-purple);
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border-left: 5px solid var(--neon-purple);
+            padding: 30px; /* Kad lebih besar */
             border-radius: 12px;
             transition: 0.3s ease;
             display: flex;
@@ -93,43 +93,44 @@
 
         .level-card:hover {
             background: rgba(177, 107, 255, 0.08);
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             border-left-color: var(--neon-cyan);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
 
         .level-title { 
             color: var(--neon-cyan); 
             font-weight: bold; 
-            font-size: 1.3rem;
-            margin-bottom: 8px; 
+            font-size: 1.6rem; /* Tajuk kad lebih dominan */
+            margin-bottom: 12px; 
             letter-spacing: 1px;
         }
 
         .level-desc {
-            font-size: 0.95rem;
-            line-height: 1.4;
-            color: #ccc;
+            font-size: 1.1rem; /* Penerangan lebih senang baca kat PC */
+            line-height: 1.6;
+            color: #ddd;
             margin: 0;
         }
 
         .nav-footer { 
-            margin-top: 40px; 
+            margin-top: 50px; 
             display: flex; 
             justify-content: space-between; 
-            gap: 15px;
+            gap: 20px;
         }
 
         .btn {
             background: transparent;
             border: 2px solid var(--neon-purple);
             color: var(--neon-purple);
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 15px 30px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 1.1rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             transition: 0.3s;
             font-family: 'Courier New', monospace;
             flex: 1;
@@ -138,34 +139,36 @@
         .btn:hover { 
             background: var(--neon-purple); 
             color: var(--bg-deep); 
-            box-shadow: 0 0 20px var(--neon-purple); 
+            box-shadow: 0 0 30px var(--neon-purple); 
         }
 
         /* --- MOBILE OPTIMIZATION --- */
         @media (max-width: 768px) {
             .terminal-window {
                 padding: 30px 20px;
-                width: 85%;
+                width: 90%;
             }
 
-            h1 { font-size: 1.6rem; letter-spacing: 2px; }
+            h1 { font-size: 1.8rem; letter-spacing: 2px; }
+            .sub-text { font-size: 1rem; }
             
             .roadmap-container {
-                grid-template-columns: 1fr; /* Phone: Susun satu column */
+                grid-template-columns: 1fr; 
             }
 
             .level-card {
-                padding: 15px;
+                padding: 20px;
             }
 
-            .level-title { font-size: 1.1rem; }
-            .level-desc { font-size: 0.85rem; }
+            .level-title { font-size: 1.3rem; }
+            .level-desc { font-size: 0.95rem; }
 
             .nav-footer {
-                flex-direction: column; /* Butang atas bawah */
+                flex-direction: column; 
+                gap: 15px;
             }
 
-            .btn { width: 100%; }
+            .btn { width: 100%; font-size: 1rem; }
         }
     </style>
 </head>
