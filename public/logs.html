@@ -21,71 +21,94 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            background-image: radial-gradient(circle at 50% 50%, rgba(0, 210, 255, 0.05) 0%, transparent 80%);
         }
 
         .log-window {
-            width: 90%;
-            max-width: 800px;
+            width: 95%;
+            max-width: 1100px; /* Lebar macam box Kesimpulan */
             background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 30px;
-            border-radius: 10px;
+            border: 2px solid var(--neon-cyan);
+            padding: 50px;
+            border-radius: 20px;
             position: relative;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 1);
+            box-shadow: 0 0 40px rgba(0, 210, 255, 0.2), inset 0 0 20px rgba(0, 0, 0, 1);
         }
 
         .log-header {
             color: var(--neon-cyan);
-            border-bottom: 1px dashed var(--neon-cyan);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            border-bottom: 2px dashed var(--neon-cyan);
+            padding-bottom: 15px;
+            margin-bottom: 35px;
             display: flex;
             justify-content: space-between;
+            font-size: 1.5rem;
+            font-weight: bold;
         }
 
         .log-entry {
-            margin-bottom: 15px;
+            margin-bottom: 30px;
             line-height: 1.6;
-            font-size: 0.9rem;
+            font-size: 1.6rem; /* Tulisan besar dan jelas */
+            display: flex;
+            align-items: center;
         }
 
         .tag {
-            padding: 2px 8px;
-            border-radius: 3px;
-            font-size: 0.75rem;
+            padding: 8px 20px;
+            border-radius: 5px;
+            font-size: 1.1rem;
             font-weight: bold;
-            margin-right: 10px;
+            margin-right: 20px;
+            min-width: 160px;
+            text-align: center;
+            text-transform: uppercase;
         }
 
-        .tag-baseline { background: #4CAF50; color: white; }
-        .tag-intermediate { background: #2196F3; color: white; }
-        .tag-advance { background: #FF9800; color: white; }
-        .tag-expert { background: #F44336; color: white; }
+        .tag-baseline { background: #4CAF50; color: white; box-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
+        .tag-intermediate { background: #2196F3; color: white; box-shadow: 0 0 10px rgba(33, 150, 243, 0.5); }
+        .tag-advance { background: #FF9800; color: white; box-shadow: 0 0 10px rgba(255, 152, 0, 0.5); }
+        .tag-expert { background: #F44336; color: white; box-shadow: 0 0 10px rgba(244, 67, 54, 0.5); }
+
+        .insight {
+            margin-top: 40px;
+            padding: 20px;
+            border-left: 5px solid var(--neon-cyan);
+            background: rgba(0, 210, 255, 0.05);
+            font-size: 1.4rem;
+            color: var(--neon-cyan);
+        }
 
         .nav-footer {
-            margin-top: 30px;
+            margin-top: 50px;
             display: flex;
             justify-content: space-between;
         }
 
         .btn {
             background: transparent;
-            border: 1px solid #fff;
-            color: #fff;
-            padding: 8px 15px;
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
             cursor: pointer;
             font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            border-radius: 10px;
         }
 
-        .btn:hover { background: #fff; color: #000; }
+        .btn:hover { 
+            background: var(--neon-cyan); 
+            color: var(--bg-deep); 
+            box-shadow: 0 0 30px var(--neon-cyan);
+        }
     </style>
 </head>
 <body>
-    <style>
-        .log-header { font-size: 1.2rem; }
-        .log-entry { font-size: 1.3rem; margin-bottom: 25px; } /* Jarak lebih luas */
-        .tag { font-size: 1rem; padding: 5px 12px; }
-    </style>
+
 <div class="log-window">
     <div class="log-header">
         <span>> GLOBAL_STANDARD_REFERENCE.LOG</span>
@@ -94,26 +117,26 @@
 
     <div class="log-entry">
         <span class="tag tag-baseline">BASELINE</span>
-        <span>CompTIA Security+, LKSEP (ATM), AWS/Azure Foundation</span>
+        <span>CompTIA Security+, LKSEP (ATM), AWS/Azure</span>
     </div>
 
     <div class="log-entry">
         <span class="tag tag-intermediate">INTERMEDIATE</span>
-        <span>ISACA (CRISC), NIST Framework, UPNM Forensics (TSS3323)</span>
+        <span>ISACA (CRISC), NIST Framework, UPNM TSS3323</span>
     </div>
 
     <div class="log-entry">
         <span class="tag tag-advance">ADVANCE</span>
-        <span>CompTIA CySA+, SANS (GCFE/FOR578), SOC Training</span>
+        <span>CompTIA CySA+, SANS GCFE, SOC Training</span>
     </div>
 
     <div class="log-entry">
         <span class="tag tag-expert">EXPERT</span>
-        <span>ISC2 (CISSP), ISO/IEC 27001, UPNM (TST3273) Post-Quantum</span>
+        <span>ISC2 (CISSP), ISO 27001, UPNM TST3273 (PQC)</span>
     </div>
 
-    <div class="log-entry" style="margin-top: 20px; color: var(--neon-cyan);">
-        <span>KEY INSIGHT: Integrasi antara doktrin ATM, akademik UPNM, dan piawaian industri.</span>
+    <div class="insight">
+        <strong>KEY INSIGHT:</strong> Integrasi antara doktrin ATM, akademik UPNM, dan piawaian industri.
     </div>
 
     <div class="nav-footer">
