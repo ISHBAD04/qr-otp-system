@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER TRAJECTORY - SLIDE</title>
+    <style>
+        :root {
+            --bg-deep: #0F051D;
+            --card-bg: #111;
+            --neon-cyan: #00D2FF;
+            --neon-purple: #B16BFF;
+            --text-pure: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-pure);
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 0;
+            background-image: radial-gradient(circle at 50% 50%, rgba(0, 210, 255, 0.05) 0%, transparent 80%);
+        }
+
+        .master-window {
+            width: 95%;
+            max-width: 1150px;
+            background: var(--card-bg);
+            border: 2px solid var(--neon-cyan);
+            padding: 60px;
+            border-radius: 25px;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 210, 255, 0.2), inset 0 0 20px rgba(0, 0, 0, 1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            height: 12px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+            box-shadow: 0 0 15px var(--neon-cyan);
+            transition: width 0.5s ease;
+        }
+
+        .header-status {
+            display: flex;
+            justify-content: space-between;
+            color: var(--neon-cyan);
+            font-weight: bold;
+            border-bottom: 2px dashed var(--neon-cyan);
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            font-size: 1.2rem;
+        }
+
+        .content-box { min-height: 400px; }
+
+        h1 {
+            color: var(--neon-purple);
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            margin-top: 0;
+            letter-spacing: 3px;
+        }
+
+        h3 { color: var(--neon-cyan); margin-top: 30px; font-size: 1.5rem; text-transform: uppercase; }
+
+        .slide-text { font-size: 1.5rem; line-height: 1.6; color: #ddd; }
+
+        ul { list-style: none; padding-left: 0; }
+        li { margin-bottom: 12px; padding-left: 30px; position: relative; }
+        li::before { content: ">"; position: absolute; left: 0; color: var(--neon-cyan); font-weight: bold; }
+
+        .nav-footer { display: flex; justify-content: space-between; margin-top: 50px; gap: 20px; }
+
+        .btn {
+            background: transparent;
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn:hover { background: var(--neon-cyan); color: var(--bg-deep); box-shadow: 0 0 25px var(--neon-cyan); }
+        .btn-next { border-color: var(--neon-purple); color: var(--neon-purple); }
+        .btn-next:hover { background: var(--neon-purple); color: #fff; box-shadow: 0 0 25px var(--neon-purple); }
+
+        @media (max-width: 768px) {
+            .master-window { padding: 30px 20px; }
+            h1 { font-size: 1.6rem; }
+            .slide-text { font-size: 1.1rem; }
+            .nav-footer { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="master-window">
+    <div class="progress-bar">
+        <div class="progress-fill" style="width: 5.8%;"></div> 
+    </div>
+
+    <div class="header-status">
+        <span>> NODE: SLIDE_01</span>
+        <span>STATUS: ACTIVE</span>
+    </div>
+
+    <div class="content-box">
+        <h1>Level 1 — Cyber Ready (Asas)</h1>
+        <div class="slide-text">
+            <h3>Fokus Utama:</h3>
+            <ul>
+                <li>Kesedaran keselamatan siber ketenteraan</li>
+                <li>Asas IT dan rangkaian</li>
+                <li>Asas pengaturcaraan & keselamatan maklumat</li>
+            </ul>
+            <h3>Peranan:</h3>
+            <ul>
+                <li>Memahami ancaman siber & melindungi sistem asas</li>
+                <li>Menyokong operasi siber</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="nav-footer">
+        <a href="spectrum.html" class="btn">PREV_NODE</a>
+        <a href="slide2.html" class="btn btn-next">NEXT_NODE</a>
+    </div>
+</div>
+
+</body>
+</html>
