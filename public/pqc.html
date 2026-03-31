@@ -130,6 +130,33 @@
             }
         }
 
+        @media (max-width: 600px) {
+            /* 1. Repair Container Butang */
+            .button-container {
+                display: flex;
+                flex-direction: column; /* Susun butang ke bawah kalau ada banyak */
+                gap: 15px;
+                width: 100%;
+                align-items: center;
+                margin-top: 30px; /* Jarakkan dari teks kat atas */
+            }
+
+            /* 2. Repair Butang TERMINATE */
+            .btn-terminate, .btn-exit, button {
+                width: 90% !important; /* Lebarkan butang kat phone */
+                padding: 15px !important;
+                font-size: 1.2rem !important; /* Bagi tulisan butang jelas sikit */
+                letter-spacing: 3px;
+                margin-bottom: 20px; /* Elakkan rapat sangat dengan edge bawah browser */
+            }
+
+            /* 3. Status Text */
+            .mission-status {
+                font-size: 1.5rem !important;
+                margin-bottom: 10px;
+            }
+        }
+
     </style>
 </head>
 <body>
