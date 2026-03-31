@@ -198,10 +198,15 @@
             processInterval = setInterval(() => {
                 if (width >= 100) {
                     clearInterval(processInterval);
+                    
+                    // Tunggu sekejap lepas loading 100% baru lompat ke page baru
                     setTimeout(() => {
-                        alert(title + " COMPLETED!");
-                        resetDashboard();
-                    }, 500);
+                        if(title === 'CYBER INTEL') window.location.href = 'intel.html';
+                        if(title === 'SPECTRUM OPS') window.location.href = 'spectrum.html';
+                        if(title === 'AUDIT LOGS') window.location.href = 'logs.html';
+                        if(title === 'PQC CONFIG') window.location.href = 'pqc.html';
+                    }, 800); 
+
                 } else {
                     width += Math.random() * 15;
                     if(width > 100) width = 100;
